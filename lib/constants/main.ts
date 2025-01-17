@@ -1,6 +1,6 @@
 const PORT = process.env.PORT || 3000;
 const API_PORT = process.env.API_PORT || 8080;
-const API_HOST = process.env.API_HOST || 'zooapi01';
+const API_HOST = process.env.API_HOST || 'localhost';
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 

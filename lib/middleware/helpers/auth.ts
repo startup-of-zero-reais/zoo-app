@@ -39,8 +39,6 @@ export function createServerClient(options: CreateServerClientOptions) {
 			};
 		}
 
-		console.log(`API DOMAIN ${API_DOMAIN}/v1/auth/me`);
-
 		const response = await fetch(`${API_DOMAIN}/v1/auth/me`, {
 			keepalive: true,
 			headers: {
