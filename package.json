@@ -14,12 +14,17 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.5",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.2",
     "eslint-plugin-security": "^3.0.1",
