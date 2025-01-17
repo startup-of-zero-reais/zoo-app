@@ -53,6 +53,23 @@ const config = {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
 				},
+				chart: {
+					'1': 'hsl(var(--chart-1))',
+					'2': 'hsl(var(--chart-2))',
+					'3': 'hsl(var(--chart-3))',
+					'4': 'hsl(var(--chart-4))',
+					'5': 'hsl(var(--chart-5))',
+				},
+				sidebar: {
+					DEFAULT: 'hsl(var(--sidebar-background))',
+					foreground: 'hsl(var(--sidebar-foreground))',
+					primary: 'hsl(var(--sidebar-primary))',
+					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+					accent: 'hsl(var(--sidebar-accent))',
+					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+					border: 'hsl(var(--sidebar-border))',
+					ring: 'hsl(var(--sidebar-ring))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -60,20 +77,38 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)',
 			},
 			keyframes: {
+				'caret-blink': {
+					'0%,70%,100%': {
+						opacity: '1',
+					},
+					'20%,50%': {
+						opacity: '0',
+					},
+				},
 				'accordion-down': {
-					from: { height: '0' },
-					to: { height: 'var(--radix-accordion-content-height)' },
+					from: {
+						height: '0',
+					},
+					to: {
+						height: 'var(--radix-accordion-content-height)',
+					},
 				},
 				'accordion-up': {
-					from: { height: 'var(--radix-accordion-content-height)' },
-					to: { height: '0' },
+					from: {
+						height: 'var(--radix-accordion-content-height)',
+					},
+					to: {
+						height: '0',
+					},
 				},
-				// Infinite scroll animation
 				'infinite-scroll': {
-					'0%': { transform: 'translateX(0)' },
-					'100%': { transform: 'translateX(-150%)' },
+					'0%': {
+						transform: 'translateX(0)',
+					},
+					'100%': {
+						transform: 'translateX(-150%)',
+					},
 				},
-				// Text appear animation
 				'text-appear': {
 					'0%': {
 						opacity: '0',
@@ -84,7 +119,6 @@ const config = {
 						transform: 'rotateX(0deg) scale(1)',
 					},
 				},
-				// Table pinned column shadow animation
 				'table-pinned-shadow': {
 					'0%': {
 						filter: 'drop-shadow(rgba(0, 0, 0, 0.1) -2px 10px 6px)',
@@ -93,48 +127,50 @@ const config = {
 						filter: 'drop-shadow(rgba(0, 0, 0, 0) -2px 10px 6px)',
 					},
 				},
-				// Pulse scale animation used for onboarding/welcome
 				'pulse-scale': {
-					'0%': { transform: 'scale(0.8)', opacity: '0' },
-					'30%': { opacity: '1' },
-					'100%': { transform: 'scale(2)', opacity: '0' },
+					'0%': {
+						transform: 'scale(0.8)',
+						opacity: '0',
+					},
+					'30%': {
+						opacity: '1',
+					},
+					'100%': {
+						transform: 'scale(2)',
+						opacity: '0',
+					},
 				},
-				// Gradient move animation for gradient text
 				'gradient-move': {
-					'0%': { backgroundPosition: '0% 50%' },
-					'100%': { backgroundPosition: '200% 50%' },
+					'0%': {
+						backgroundPosition: '0% 50%',
+					},
+					'100%': {
+						backgroundPosition: '200% 50%',
+					},
 				},
 			},
 			animation: {
-				// Modal
+				'caret-blink': 'caret-blink 1.25s ease-out infinite',
 				'scale-in': 'scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
 				'fade-in': 'fade-in 0.2s ease-out forwards',
-				// Popover, Tooltip
 				'slide-up-fade': 'slide-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
 				'slide-right-fade':
 					'slide-right-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
 				'slide-down-fade': 'slide-down-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
 				'slide-left-fade': 'slide-left-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-				// Sheet
 				'slide-in-from-right': 'slide-in-from-right 0.2s ease',
 				'slide-out-to-right': 'slide-out-to-right 0.2s ease',
-				// Navigation menu
 				'enter-from-right': 'enter-from-right 0.15s ease',
 				'enter-from-left': 'enter-from-left 0.15s ease',
 				'exit-to-right': 'exit-to-right 0.15s ease',
 				'exit-to-left': 'exit-to-left 0.15s ease',
 				'scale-in-content': 'scale-in-content 0.2s ease',
 				'scale-out-content': 'scale-out-content 0.2s ease',
-				// Accordion
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				// Infinite scroll animation
 				'infinite-scroll': 'infinite-scroll 22s linear infinite',
-				// Text appear animation
 				'text-appear': 'text-appear 0.15s ease',
-				// Table pinned column shadow animation
 				'table-pinned-shadow': 'table-pinned-shadow cubic-bezier(0, 0, 1, 0)',
-				// Pulse scale animation used for onboarding/welcome
 				'pulse-scale': 'pulse-scale 6s ease-out infinite',
 				'gradient-move': 'gradient-move 5s linear infinite',
 			},
