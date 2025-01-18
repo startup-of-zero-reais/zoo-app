@@ -87,7 +87,7 @@ const eslintConfig = [
 			'no-restricted-imports': [
 				'error',
 				{
-					patterns: ['.*', '!*.css'],
+					patterns: ['..*', '!./*'],
 				},
 			],
 			'import/order': [
@@ -100,7 +100,11 @@ const eslintConfig = [
 							group: 'external',
 							position: 'after',
 						},
-
+						{
+							pattern: '@/components/**',
+							group: 'external',
+							position: 'after',
+						},
 						{
 							pattern: './**',
 							group: 'external',

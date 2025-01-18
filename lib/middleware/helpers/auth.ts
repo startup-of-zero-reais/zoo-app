@@ -4,6 +4,7 @@ import {
 } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/types/entities/user';
 import { API_DOMAIN } from '@/lib/constants/main';
+import { SESSION_TOKEN } from '@/lib/constants/auth';
 
 interface CreateServerClientOptions {
 	cookies: {
@@ -17,11 +18,6 @@ interface CreateServerClientOptions {
 		): void;
 	};
 }
-
-const SESSION_TOKEN =
-	process.env.NODE_ENV === 'production'
-		? '__Secure-session_token'
-		: 'session_token';
 
 export function createServerClient(options: CreateServerClientOptions) {
 	const { getAll } = options.cookies;
