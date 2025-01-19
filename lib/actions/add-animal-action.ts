@@ -1,7 +1,16 @@
 'use server';
 
 import { z } from 'zod';
+import { authFetch } from '@/lib/functions/auth-fetcher';
+import { API_DOMAIN } from '@/lib/constants/main';
 import { authActionClient } from './safe-action';
+
+const MICROCHIP = 'microchip';
+const WASHER = 'anilha';
+const MARK_TYPE = {
+	[MICROCHIP]: MICROCHIP,
+	[WASHER]: 'washer',
+};
 
 export const addAnimalAction = authActionClient
 	.schema(
@@ -43,9 +52,33 @@ export const addAnimalAction = authActionClient
 		}),
 	)
 	.action(async ({ parsedInput }) => {
-		console.log(parsedInput);
+		const {
+			name,
+			mark_type,
+			mark_num,
+			entry_date,
+			origin,
+			animal_born,
+			species,
+			enclosure,
+			weight,
+		} = parsedInput;
 
-		await new Promise((resolve) => setTimeout(resolve, 10000));
+		const body = new FormData();
+		body.append('name', name);
+		body.append('mark_type', MARK_TYPE[mark_type]);
+		body.append('mark_number', mark_num);
+		body.append('landing_at', entry_date.toISOString());
+		body.append('origin', origin);
+		body.append('age', animal_born.toISOString());
+		body.append('species_id', species);
+		body.append('enclosure_id', enclosure);
+		body.append('weight', `${weight}`);
+
+		await authFetch(`${API_DOMAIN}/v1/animals`, {
+			method: 'POST',
+			body,
+		});
 
 		return { success: true };
 	});
