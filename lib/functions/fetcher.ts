@@ -17,3 +17,13 @@ export async function fetcher<JSON = unknown>(
 
 	return response.json();
 }
+
+export async function fetcherWithCookies<JSON = unknown>(
+	input: RequestInfo,
+	init?: RequestInit,
+): Promise<JSON> {
+	return fetcher(input, {
+		...(init || {}),
+		credentials: 'include',
+	});
+}

@@ -1,9 +1,11 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Search } from 'lucide-react';
+import Link from 'next/link';
+import { PlusCircle, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Species } from '@/lib/types/entities/species';
+import { useSpecies } from '@/lib/swr/use-species';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,167 +20,8 @@ import {
 	SheetTrigger,
 } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
-
-const speciesApiResult = {
-	total: 38,
-	species: [
-		{
-			id: '02786098-12ef-46d0-a595-f51da3bbd601',
-			cientific_name: 'Panthera leo',
-			common_name: 'Leão',
-			created_at: '2024-10-16T03:03:07.176440Z',
-			updated_at: '2024-10-28T03:03:07.176440Z',
-			deleted_at: null,
-		},
-		{
-			id: 'e2928816-0a7a-4c4f-a063-a624a91d5f73',
-			cientific_name: 'Canis lupus',
-			common_name: 'Lobo',
-			created_at: '2024-06-13T03:03:07.176603Z',
-			updated_at: '2024-07-12T03:03:07.176603Z',
-			deleted_at: null,
-		},
-		{
-			id: 'dabac5c0-f580-4d00-98fc-86aef196bce5',
-			cientific_name: 'Ursus arctos',
-			common_name: 'Urso-pardo',
-			created_at: '2024-07-18T03:03:07.176680Z',
-			updated_at: '2024-08-11T03:03:07.176680Z',
-			deleted_at: null,
-		},
-		{
-			id: '09d3339e-7fbc-4e64-a8a6-21508599ea4d',
-			cientific_name: 'Gorilla gorilla',
-			common_name: 'Gorila',
-			created_at: '2024-07-14T03:03:07.176724Z',
-			updated_at: '2024-07-21T03:03:07.176724Z',
-			deleted_at: null,
-		},
-		{
-			id: '971c695f-8872-4eb4-9389-c372582dce9a',
-			cientific_name: 'Elephas maximus',
-			common_name: 'Elefante-asiático',
-			created_at: '2024-01-31T03:03:07.176753Z',
-			updated_at: '2024-02-25T03:03:07.176753Z',
-			deleted_at: null,
-		},
-		{
-			id: 'deb2e679-e50b-496d-8070-3c459aacd1a9',
-			cientific_name: 'Ailuropoda melanoleuca',
-			common_name: 'Panda-gigante',
-			created_at: '2024-11-08T03:03:07.176823Z',
-			updated_at: '2024-12-03T03:03:07.176823Z',
-			deleted_at: null,
-		},
-		{
-			id: 'f2ac9108-d1b6-443a-a1b5-16988d79e62b',
-			cientific_name: 'Delphinus delphis',
-			common_name: 'Golfinho-comum',
-			created_at: '2024-05-23T03:03:07.176952Z',
-			updated_at: '2024-06-22T03:03:07.176952Z',
-			deleted_at: null,
-		},
-		{
-			id: '6a139094-e34a-4b27-9fd1-66222b31b5f5',
-			cientific_name: 'Falco peregrinus',
-			common_name: 'Falcão-peregrino',
-			created_at: '2025-01-08T03:03:07.177022Z',
-			updated_at: '2025-01-31T03:03:07.177022Z',
-			deleted_at: null,
-		},
-		{
-			id: 'e9bbf634-b5fd-4ea0-a082-d6cd6a183145',
-			cientific_name: 'Carcharodon carcharias',
-			common_name: 'Tubarão-branco',
-			created_at: '2024-04-13T03:03:07.177199Z',
-			updated_at: '2024-04-23T03:03:07.177199Z',
-			deleted_at: null,
-		},
-		{
-			id: '182d14e7-32b4-4a01-80a0-78b01159e8b0',
-			cientific_name: 'Chelonia mydas',
-			common_name: 'Tartaruga-verde',
-			created_at: '2024-12-02T03:03:07.177286Z',
-			updated_at: '2024-12-29T03:03:07.177286Z',
-			deleted_at: null,
-		},
-		{
-			id: '33110207-5c0f-4d10-b26f-720ed1e11084',
-			cientific_name: 'Pongo pygmaeus',
-			common_name: 'Orangotango',
-			created_at: '2024-12-30T03:03:07.177320Z',
-			updated_at: '2025-01-21T03:03:07.177320Z',
-			deleted_at: null,
-		},
-		{
-			id: 'b24e00a6-f137-403e-9e27-cc56a58b5e52',
-			cientific_name: 'Haliaeetus leucocephalus',
-			common_name: 'Águia-careca',
-			created_at: '2024-12-25T03:03:07.177369Z',
-			updated_at: '2024-12-27T03:03:07.177369Z',
-			deleted_at: null,
-		},
-		{
-			id: '11c7cbc5-0480-4e27-b646-8b063c4c5742',
-			cientific_name: 'Strix aluco',
-			common_name: 'Coruja-das-torres',
-			created_at: '2024-04-17T03:03:07.177394Z',
-			updated_at: '2024-05-16T03:03:07.177394Z',
-			deleted_at: null,
-		},
-		{
-			id: '52998e59-fdca-41db-9828-99cb0072ec1b',
-			cientific_name: 'Equus ferus caballus',
-			common_name: 'Cavalo',
-			created_at: '2024-10-03T03:03:07.177406Z',
-			updated_at: '2024-10-05T03:03:07.177406Z',
-			deleted_at: null,
-		},
-		{
-			id: '9c891d3f-2696-48fd-a9a8-9dde0b9b62e4',
-			cientific_name: 'Phascolarctos cinereus',
-			common_name: 'Coala',
-			created_at: '2024-06-18T03:03:07.177418Z',
-			updated_at: '2024-07-17T03:03:07.177418Z',
-			deleted_at: null,
-		},
-		{
-			id: '01343b65-2325-4af2-bdc6-70e5cae12d23',
-			cientific_name: 'Spheniscus demersus',
-			common_name: 'Pinguim-africano',
-			created_at: '2024-03-24T03:03:07.177433Z',
-			updated_at: '2024-04-21T03:03:07.177433Z',
-			deleted_at: null,
-		},
-		{
-			id: '696b984b-bf6d-45a2-a092-8267d4a66235',
-			cientific_name: 'Loxodonta africana',
-			common_name: 'Elefante-africano',
-			created_at: '2024-04-09T03:03:07.177446Z',
-			updated_at: '2024-04-29T03:03:07.177446Z',
-			deleted_at: null,
-		},
-		{
-			id: 'afd096df-4bb8-4579-bc2e-3a468eda1233',
-			cientific_name: 'Balaenoptera musculus',
-			common_name: 'Baleia-azul',
-			created_at: '2024-03-12T03:03:07.177458Z',
-			updated_at: '2024-03-19T03:03:07.177458Z',
-			deleted_at: null,
-		},
-		{
-			id: 'e29b6214-3588-44eb-a12d-f2ec36449772',
-			cientific_name: 'Vulpes vulpes',
-			common_name: 'Raposa-vermelha',
-			created_at: '2024-06-24T03:03:07.177482Z',
-			updated_at: '2024-07-12T03:03:07.177482Z',
-			deleted_at: null,
-		},
-	],
-} satisfies {
-	total: number;
-	species: Species[];
-};
+import { Skeleton } from '@/components/ui/skeleton';
+import { useDebounce } from '@/hooks/use-debounce';
 
 interface SearchSpeciesProps {
 	placeholder?: string;
@@ -193,6 +36,10 @@ export default function SearchSpecies({
 }: SearchSpeciesProps) {
 	const [open, onOpenChange] = useState(false);
 	const [selected, setSelected] = useState(selectedItem || ({} as Species));
+	const [search, setSearch] = useState('');
+	const debouncedSearch = useDebounce(search, 400);
+
+	const { species, isLoading, isError } = useSpecies(debouncedSearch);
 
 	const hasOption = !!selected.common_name && !!selected.cientific_name;
 
@@ -241,7 +88,10 @@ export default function SearchSpecies({
 					</SheetHeader>
 
 					<div className="grid grid-cols-[1fr,40px] gap-2">
-						<Input placeholder="Panthera leo" />
+						<Input
+							placeholder="Panthera leo"
+							onChange={(e) => setSearch(e.target.value)}
+						/>
 						<div className="border flex items-center justify-center flex-1">
 							<Search size={18} className="text-muted-foreground" />
 						</div>
@@ -249,7 +99,54 @@ export default function SearchSpecies({
 
 					<ScrollArea className="border p-2">
 						<div className="w-full flex flex-col gap-2">
-							{speciesApiResult.species.map((species) => (
+							{isError && (
+								<p className="border border-destructive bg-destructive/10 text-destructive text-sm p-4">
+									Ocorreu um erro, tente novamente. Se o erro persistir, contate
+									nossa equipe de suporte
+								</p>
+							)}
+
+							{isLoading && (
+								<>
+									{Array(20)
+										.fill(null)
+										.map((_, i) => (
+											<div
+												key={i.toString()}
+												className="border p-2 w-full grid grid-cols-[1fr,auto,1fr] gap-1 items-center"
+											>
+												<Skeleton className="h-full" />
+												<Separator
+													orientation="vertical"
+													className="h-4 mx-2"
+												/>
+												<Skeleton className="h-full" />
+											</div>
+										))}
+								</>
+							)}
+
+							{species.species.length === 0 && (
+								<div className="border p-2 w-full flex flex-col items-center gap-2">
+									<h1 className="text-xl font-semibold">Nenhum resultado</h1>
+									<h2 className="text-2xl">
+										😥
+										<span hidden>Emoji desapontado</span>
+									</h2>
+									<p className="text-sm text-muted-foreground text-center">
+										Tente buscar com outro termo, ou tente cadastrar uma nova
+										espécie
+									</p>
+									<Button asChild>
+										<Link href={'/dashboard/especies'}>
+											<PlusCircle />
+											Adicionar espécie ao sistema
+										</Link>
+									</Button>
+								</div>
+							)}
+
+							{species.species.map((species) => (
 								<button
 									key={species.id}
 									className="border p-2 hover:bg-muted-foreground/10 data-[selected=true]:bg-primary/20"
