@@ -1,5 +1,153 @@
 import AnimalsForm from './form';
 
+const enclosures = {
+	total: 20,
+	prev: null,
+	next: null,
+	enclosures: [
+		{
+			id: 'd5a8db79-b3b3-4a20-adef-c9dfa895236e',
+			identification: 'Savanna Africana',
+			created_at: '2024-08-14T16:39:35.870886Z',
+			updated_at: '2024-09-07T16:39:35.870886Z',
+			deleted_at: null,
+		},
+		{
+			id: 'ce7e3098-e558-42fd-b0fc-dff4e0840a1c',
+			identification: 'Pântano dos Jacarés',
+			created_at: '2024-04-16T16:39:35.871073Z',
+			updated_at: '2024-05-09T16:39:35.871073Z',
+			deleted_at: null,
+		},
+		{
+			id: 'dd8f8fba-d17c-41bd-ad92-887022556c97',
+			identification: 'Floresta Tropical',
+			created_at: '2024-10-13T16:39:35.871176Z',
+			updated_at: '2024-11-08T16:39:35.871176Z',
+			deleted_at: null,
+		},
+		{
+			id: '29ee9cae-fa1c-4e0c-b070-e8020c4ff8fe',
+			identification: 'Montanhas Rochosas',
+			created_at: '2024-01-20T16:39:35.871381Z',
+			updated_at: '2024-02-17T16:39:35.871381Z',
+			deleted_at: null,
+		},
+		{
+			id: '5e2a0646-120a-4f10-a06f-4445f9675ce1',
+			identification: 'Lago dos Flamingos',
+			created_at: '2024-12-06T16:39:35.871695Z',
+			updated_at: '2024-12-09T16:39:35.871695Z',
+			deleted_at: null,
+		},
+		{
+			id: '1ec141ef-3a71-4f39-ad1d-b051fbb31a76',
+			identification: 'Deserto de Areia',
+			created_at: '2024-04-30T16:39:35.872073Z',
+			updated_at: '2024-05-24T16:39:35.872073Z',
+			deleted_at: null,
+		},
+		{
+			id: '267c3851-ce97-4b1a-8ae9-320f1f1797f5',
+			identification: 'Reserva dos Leões',
+			created_at: '2025-01-06T16:39:35.873192Z',
+			updated_at: '2025-01-22T16:39:35.873192Z',
+			deleted_at: null,
+		},
+		{
+			id: '48d46b7c-dc0e-4554-ade8-5d235d4505fb',
+			identification: 'Vale dos Lobos',
+			created_at: '2024-05-21T16:39:35.873246Z',
+			updated_at: '2024-06-16T16:39:35.873246Z',
+			deleted_at: null,
+		},
+		{
+			id: '3732032f-71cc-4d49-afc1-42b06602a4ff',
+			identification: 'Caverna dos Morcegos',
+			created_at: '2024-06-07T16:39:35.873280Z',
+			updated_at: '2024-07-01T16:39:35.873280Z',
+			deleted_at: null,
+		},
+		{
+			id: 'dec4be03-f392-41e2-9bce-ae6f6b4b854a',
+			identification: 'Jardim dos Pássaros',
+			created_at: '2024-10-23T16:39:35.873311Z',
+			updated_at: '2024-11-18T16:39:35.873311Z',
+			deleted_at: null,
+		},
+		{
+			id: '7a5ae845-12f9-4716-ada4-e619d030060f',
+			identification: 'Toca dos Ursos',
+			created_at: '2024-10-14T16:39:35.873329Z',
+			updated_at: '2024-10-15T16:39:35.873329Z',
+			deleted_at: null,
+		},
+		{
+			id: 'be9e6683-3472-4499-be28-2e06edc7775b',
+			identification: 'Recinto dos Elefantes',
+			created_at: '2024-06-10T16:39:35.873346Z',
+			updated_at: '2024-06-12T16:39:35.873346Z',
+			deleted_at: null,
+		},
+		{
+			id: '32faa970-4244-4147-9d3a-7269b6893126',
+			identification: 'Aquário dos Tubarões',
+			created_at: '2024-04-18T16:39:35.873365Z',
+			updated_at: '2024-05-03T16:39:35.873365Z',
+			deleted_at: null,
+		},
+		{
+			id: 'fb0a4807-67a3-4c8b-90d6-ecc3479fde59',
+			identification: 'Ilha dos Primatas',
+			created_at: '2024-12-04T16:39:35.873381Z',
+			updated_at: '2024-12-19T16:39:35.873381Z',
+			deleted_at: null,
+		},
+		{
+			id: '67dccca3-24d3-4a24-abb1-59bfd4e2f2d6',
+			identification: 'Campo dos Cangurus',
+			created_at: '2024-04-20T16:39:35.873397Z',
+			updated_at: '2024-05-04T16:39:35.873397Z',
+			deleted_at: null,
+		},
+		{
+			id: 'b9524516-37c1-4fb8-b52c-35fe5435cb7a',
+			identification: 'Refúgio dos Pinguins',
+			created_at: '2024-04-20T16:39:35.873413Z',
+			updated_at: '2024-05-03T16:39:35.873413Z',
+			deleted_at: null,
+		},
+		{
+			id: '9ae64ff4-00d4-4901-9da3-c18eac8be077',
+			identification: 'Floresta dos Gorilas',
+			created_at: '2024-08-23T16:39:35.873429Z',
+			updated_at: '2024-09-09T16:39:35.873429Z',
+			deleted_at: null,
+		},
+		{
+			id: '616c865b-7a4d-471e-bde6-f682fd8ecda9',
+			identification: 'Planície dos Rinocerontes',
+			created_at: '2024-09-08T16:39:35.873445Z',
+			updated_at: '2024-09-20T16:39:35.873445Z',
+			deleted_at: null,
+		},
+		{
+			id: '9e97e755-9bd6-4de0-8af0-431bfcbeb0f4',
+			identification: 'Praia das Tartarugas',
+			created_at: '2024-02-02T16:39:35.873488Z',
+			updated_at: '2024-02-12T16:39:35.873488Z',
+			deleted_at: null,
+		},
+		{
+			id: '6d656fd6-1397-4662-8eaf-13d570f0466d',
+			identification: 'Santuário das Águias',
+			created_at: '2024-05-22T16:39:35.873508Z',
+			updated_at: '2024-06-14T16:39:35.873508Z',
+			deleted_at: null,
+		},
+	],
+};
+
 export default function Page() {
-	return <AnimalsForm />;
+	return <AnimalsForm enclosures={enclosures.enclosures} />;
 }
