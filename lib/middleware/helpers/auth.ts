@@ -44,7 +44,7 @@ export function createServerClient(options: CreateServerClientOptions) {
 			.then(async (res) => {
 				if (!res.ok) {
 					const textBuffer = await res.text();
-					console.log('Request was not ok', textBuffer.substring(0, 256));
+					console.error('Request was not ok', textBuffer.substring(0, 256));
 					return null;
 				}
 

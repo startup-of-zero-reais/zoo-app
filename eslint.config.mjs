@@ -106,6 +106,11 @@ const eslintConfig = [
 							position: 'after',
 						},
 						{
+							pattern: '@/hooks/**',
+							group: 'external',
+							position: 'after',
+						},
+						{
 							pattern: './**',
 							group: 'external',
 							position: 'after',

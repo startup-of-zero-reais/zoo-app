@@ -13,7 +13,12 @@ import SidebarFooterContent from './footer';
 const animalsItems: MenuItem[] = [
 	{
 		title: 'Cadastrar animal',
-		url: '#',
+		url: '/dashboard/animais',
+		icon: PlusCircleIcon,
+	},
+	{
+		title: 'Cadastrar espécie',
+		url: '/dashboard/especies',
 		icon: PlusCircleIcon,
 	},
 ];
@@ -21,7 +26,7 @@ const animalsItems: MenuItem[] = [
 const enclosuresItems: MenuItem[] = [
 	{
 		title: 'Cadastrar recinto',
-		url: '#',
+		url: '/dashboard/recintos',
 		icon: PlusCircleIcon,
 	},
 ];
