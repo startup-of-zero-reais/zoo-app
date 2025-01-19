@@ -38,8 +38,6 @@ export default async function AppMiddleware(request: NextRequest) {
 		path,
 	);
 
-	console.log(path, isInPublicPath, user);
-
 	// se o usuario nao esta logado nem em pagina de login ou callback de autorizacao
 	// enviamos ele para o login
 	if (!user && !isInPublicPath) {
