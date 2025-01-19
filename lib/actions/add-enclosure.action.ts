@@ -17,7 +17,7 @@ export const addEnclosureAction = authActionClient
 		const { identifier } = parsedInput;
 
 		const body = new FormData();
-		body.append('identifier', identifier);
+		body.append('identification', identifier);
 
 		await authFetch(`${API_DOMAIN}/v1/enclosures`, {
 			method: 'POST',
