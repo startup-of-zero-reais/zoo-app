@@ -45,7 +45,7 @@ export default async function AppMiddleware(request: NextRequest) {
 			path === '/' ? '' : `?redir_to=${encodeURIComponent(fullPath)}`;
 
 		return NextResponse.redirect(
-			new URL(`/app${PAGE.LOGIN}${whereToGo}`, request.url),
+			new URL(`${PAGE.LOGIN}${whereToGo}`, request.url),
 		);
 
 		// se o usuario esta logado
@@ -57,7 +57,7 @@ export default async function AppMiddleware(request: NextRequest) {
 				new URL(`/app${PAGE.ONBOARDING}`, request.url),
 			);
 		} else if (['/', PAGE.LOGIN].includes(path)) {
-			return NextResponse.redirect(new URL(`/app${fullPath}`, request.url));
+			return NextResponse.redirect(new URL(`/app/dashboard`, request.url));
 		}
 	}
 

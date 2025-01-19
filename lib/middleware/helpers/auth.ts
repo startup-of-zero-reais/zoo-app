@@ -4,6 +4,7 @@ import {
 } from 'next/dist/compiled/@edge-runtime/cookies';
 import { User } from '@/lib/types/entities/user';
 import { API_DOMAIN } from '@/lib/constants/main';
+import { SESSION_TOKEN } from '@/lib/constants/auth';
 
 interface CreateServerClientOptions {
 	cookies: {
@@ -17,11 +18,6 @@ interface CreateServerClientOptions {
 		): void;
 	};
 }
-
-const SESSION_TOKEN =
-	process.env.NODE_ENV === 'production'
-		? '__Secure-session_token'
-		: 'session_token';
 
 export function createServerClient(options: CreateServerClientOptions) {
 	const { getAll } = options.cookies;
@@ -48,7 +44,7 @@ export function createServerClient(options: CreateServerClientOptions) {
 			.then(async (res) => {
 				if (!res.ok) {
 					const textBuffer = await res.text();
-					console.log('Request was not ok', textBuffer.substring(0, 256));
+					console.error('Request was not ok', textBuffer.substring(0, 256));
 					return null;
 				}
 
