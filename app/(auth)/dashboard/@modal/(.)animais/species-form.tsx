@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import Link from 'next/link';
-import { PlusCircle, Search } from 'lucide-react';
+import { PlusCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Species } from '@/lib/types/entities/species';
 import { useSpecies } from '@/lib/swr/use-species';
@@ -19,6 +19,11 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -91,10 +96,23 @@ export default function SearchSpecies({
 						<Input
 							placeholder="Panthera leo"
 							onChange={(e) => setSearch(e.target.value)}
+							value={search}
 						/>
-						<div className="border flex items-center justify-center flex-1">
-							<Search size={18} className="text-muted-foreground" />
-						</div>
+
+						<Tooltip>
+							<TooltipTrigger className="border flex items-center justify-center flex-1">
+								<div>
+									<X
+										size={18}
+										className="text-muted-foreground"
+										onClick={() => setSearch('')}
+									/>
+								</div>
+							</TooltipTrigger>
+							<TooltipContent>
+								<span>Limpar pesquisa e resultados</span>
+							</TooltipContent>
+						</Tooltip>
 					</div>
 
 					<ScrollArea className="border p-2">
