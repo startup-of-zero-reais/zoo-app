@@ -87,8 +87,10 @@ export default function SearchSpecies({
 						<SheetTitle>Selecione a espécie</SheetTitle>
 						<SheetDescription>
 							Pesquise abaixo e selecione a espécie. A pesquisa pode ser por{' '}
-							<span className="text-primary">nome científico</span> ou por{' '}
-							<span className="text-primary">nome popular</span>
+							<span className="text-primary">nome científico</span>,{' '}
+							<span className="text-primary">nome popular</span>,{' '}
+							<span className="text-primary">classe</span> ou{' '}
+							<span className="text-primary">ordem taxonômica</span>
 						</SheetDescription>
 					</SheetHeader>
 
