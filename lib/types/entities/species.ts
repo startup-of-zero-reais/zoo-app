@@ -4,6 +4,8 @@ export interface BaseSpecies {
 	id: string;
 	cientific_name: string;
 	common_name: string;
+	kind: string;
+	taxonomic_order: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

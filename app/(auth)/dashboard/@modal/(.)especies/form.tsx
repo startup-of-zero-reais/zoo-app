@@ -47,8 +47,17 @@ export default function SpeciesForm() {
 			const common_name: string = e.target['common_name'].value as unknown;
 			// @ts-expect-error unknown is not string
 			const cientific_name: string = e.target['cientific'].value as unknown;
+			// @ts-expect-error unknown is not string
+			const kind: string = e.target['kind'].value as unknown;
+			// @ts-expect-error unknown is not string
+			const taxonomic_order: string = e.target['order'].value as unknown;
 
-			const result = await executeAsync({ common_name, cientific_name });
+			const result = await executeAsync({
+				common_name,
+				cientific_name,
+				kind,
+				taxonomic_order,
+			});
 			const { proceed } = handleServerErrors(result);
 			if (!proceed) {
 				return;
@@ -92,6 +101,30 @@ export default function SpeciesForm() {
 							name="cientific"
 							type="text"
 							placeholder="Panthera leo"
+						/>
+					</div>
+
+					<div>
+						<Label htmlFor="kind">Classe</Label>
+						<Input
+							aria-required
+							required
+							id="kind"
+							name="kind"
+							type="text"
+							placeholder="Mammalia"
+						/>
+					</div>
+
+					<div>
+						<Label htmlFor="order">Ordem</Label>
+						<Input
+							aria-required
+							required
+							id="order"
+							name="order"
+							type="text"
+							placeholder="Carnivora"
 						/>
 					</div>
 
