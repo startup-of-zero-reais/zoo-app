@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import { format } from 'date-fns';
 import { authFetch } from '@/lib/functions/auth-fetcher';
 import { API_DOMAIN } from '@/lib/constants/main';
 import { authActionClient } from './safe-action';
@@ -68,9 +69,9 @@ export const addAnimalAction = authActionClient
 		body.append('name', name);
 		body.append('mark_type', MARK_TYPE[mark_type]);
 		body.append('mark_number', mark_num);
-		body.append('landing_at', entry_date.toISOString());
+		body.append('landing_at', format(entry_date, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
 		body.append('origin', origin);
-		body.append('age', animal_born.toISOString());
+		body.append('age', format(animal_born, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
 		body.append('species_id', species);
 		body.append('enclosure_id', enclosure);
 		body.append('weight', `${weight}`);
