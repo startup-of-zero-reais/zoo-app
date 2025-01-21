@@ -134,14 +134,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 					<div className="space-y-4">
 						<div>
 							<Label htmlFor="name">Nome</Label>
-							<Input
-								aria-required
-								required
-								id="name"
-								name="name"
-								type="text"
-								placeholder="Simba"
-							/>
+							<Input id="name" name="name" type="text" placeholder="Simba" />
 						</div>
 
 						<div>
@@ -184,8 +177,6 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 						<div>
 							<Label htmlFor="origin">Origem</Label>
 							<Input
-								aria-required
-								required
 								id="origin"
 								name="origin"
 								type="text"

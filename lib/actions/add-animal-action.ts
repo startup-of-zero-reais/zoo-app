@@ -16,7 +16,7 @@ const MARK_TYPE = {
 export const addAnimalAction = authActionClient
 	.schema(
 		z.object({
-			name: z.string().min(1, 'O campo "Nome" é necessário para continuar.'),
+			name: z.string().optional(),
 			mark_type: z.enum(['microchip', 'anilha'], {
 				message: 'Selecione o tipo de marcação para continuar.',
 				required_error: 'Selecione o tipo de marcação para continuar.',
@@ -29,9 +29,7 @@ export const addAnimalAction = authActionClient
 				message: 'A "Data de chegada" deve ser uma data correta.',
 				coerce: true,
 			}),
-			origin: z
-				.string()
-				.min(1, 'O campo "Origem" deve ser informado para continuar.'),
+			origin: z.string().optional(),
 			animal_born: z.date({
 				required_error:
 					'Informe a "Idade do animal" ou a "Data de nascimento" para prosseguir.',
@@ -66,11 +64,19 @@ export const addAnimalAction = authActionClient
 		} = parsedInput;
 
 		const body = new FormData();
-		body.append('name', name);
+
+		if (name) {
+			body.append('name', name);
+		}
+
 		body.append('mark_type', MARK_TYPE[mark_type]);
 		body.append('mark_number', mark_num);
 		body.append('landing_at', format(entry_date, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
-		body.append('origin', origin);
+
+		if (origin) {
+			body.append('origin', origin);
+		}
+
 		body.append('age', format(animal_born, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
 		body.append('species_id', species);
 		body.append('enclosure_id', enclosure);
