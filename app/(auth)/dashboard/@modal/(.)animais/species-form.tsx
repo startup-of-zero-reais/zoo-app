@@ -139,6 +139,12 @@ export default function SearchSpecies({
 													className="h-4 mx-2"
 												/>
 												<Skeleton className="h-full" />
+												<Skeleton className="h-full" />
+												<Separator
+													orientation="vertical"
+													className="h-4 mx-2"
+												/>
+												<Skeleton className="h-full" />
 											</div>
 										))}
 								</>
@@ -176,6 +182,13 @@ export default function SearchSpecies({
 										<Separator orientation="vertical" className="h-4 mx-2" />
 										<span className="text-sm text-muted-foreground">
 											{species.cientific_name}
+										</span>
+										<span className="text-xs text-muted-foreground">
+											{species.kind}
+										</span>
+										<Separator orientation="vertical" className="h-4 mx-2" />
+										<span className="text-xs text-muted-foreground">
+											{species.taxonomic_order}
 										</span>
 									</header>
 								</button>
