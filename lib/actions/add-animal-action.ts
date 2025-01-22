@@ -1,12 +1,22 @@
 'use server';
 
 import { z } from 'zod';
+import { format } from 'date-fns';
+import { authFetch } from '@/lib/functions/auth-fetcher';
+import { API_DOMAIN } from '@/lib/constants/main';
 import { authActionClient } from './safe-action';
+
+const MICROCHIP = 'microchip';
+const WASHER = 'anilha';
+const MARK_TYPE = {
+	[MICROCHIP]: MICROCHIP,
+	[WASHER]: 'washer',
+};
 
 export const addAnimalAction = authActionClient
 	.schema(
 		z.object({
-			name: z.string().min(1, 'O campo "Nome" é necessário para continuar.'),
+			name: z.string().optional(),
 			mark_type: z.enum(['microchip', 'anilha'], {
 				message: 'Selecione o tipo de marcação para continuar.',
 				required_error: 'Selecione o tipo de marcação para continuar.',
@@ -19,9 +29,7 @@ export const addAnimalAction = authActionClient
 				message: 'A "Data de chegada" deve ser uma data correta.',
 				coerce: true,
 			}),
-			origin: z
-				.string()
-				.min(1, 'O campo "Origem" deve ser informado para continuar.'),
+			origin: z.string().optional(),
 			animal_born: z.date({
 				required_error:
 					'Informe a "Idade do animal" ou a "Data de nascimento" para prosseguir.',
@@ -43,9 +51,41 @@ export const addAnimalAction = authActionClient
 		}),
 	)
 	.action(async ({ parsedInput }) => {
-		console.log(parsedInput);
+		const {
+			name,
+			mark_type,
+			mark_num,
+			entry_date,
+			origin,
+			animal_born,
+			species,
+			enclosure,
+			weight,
+		} = parsedInput;
 
-		await new Promise((resolve) => setTimeout(resolve, 10000));
+		const body = new FormData();
+
+		if (name) {
+			body.append('name', name);
+		}
+
+		body.append('mark_type', MARK_TYPE[mark_type]);
+		body.append('mark_number', mark_num);
+		body.append('landing_at', format(entry_date, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
+
+		if (origin) {
+			body.append('origin', origin);
+		}
+
+		body.append('age', format(animal_born, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
+		body.append('species_id', species);
+		body.append('enclosure_id', enclosure);
+		body.append('weight', `${weight}`);
+
+		await authFetch(`${API_DOMAIN}/v1/animals`, {
+			method: 'POST',
+			body,
+		});
 
 		return { success: true };
 	});

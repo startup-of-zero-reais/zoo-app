@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback } from 'react';
-import { LoaderCircle, Save } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import { Bot, LoaderCircle, Save, Sparkles } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { addSpeciesAction } from '@/lib/actions/add-species.action';
 import { handleServerErrors } from '@/lib/functions/errors';
+import { useSpeciesCompletition } from '@/lib/openai/requests/complete-species';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -17,10 +18,22 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useOpenChange } from '@/hooks/use-open-change';
 
 export default function SpeciesForm() {
 	const [open, onOpenChange, onClose] = useOpenChange();
+	const [commonName, setCommonName] = useState('');
+	const [scientificName, setScientificName] = useState('');
+	const [taxonomicClass, setTaxonomicClass] = useState('');
+	const [taxonomicOrder, setTaxonomicOrder] = useState('');
+
+	const { isLoading: isLoadingCompletition, onRequest } =
+		useSpeciesCompletition();
 
 	const { executeAsync, hasSucceeded, isExecuting } = useAction(
 		addSpeciesAction,
@@ -37,7 +50,7 @@ export default function SpeciesForm() {
 		},
 	);
 
-	const isLoading = hasSucceeded || isExecuting;
+	const isLoading = hasSucceeded || isExecuting || isLoadingCompletition;
 
 	const onSubmit = useCallback(
 		async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,8 +60,17 @@ export default function SpeciesForm() {
 			const common_name: string = e.target['common_name'].value as unknown;
 			// @ts-expect-error unknown is not string
 			const cientific_name: string = e.target['cientific'].value as unknown;
+			// @ts-expect-error unknown is not string
+			const kind: string = e.target['kind'].value as unknown;
+			// @ts-expect-error unknown is not string
+			const taxonomic_order: string = e.target['order'].value as unknown;
 
-			const result = await executeAsync({ common_name, cientific_name });
+			const result = await executeAsync({
+				common_name,
+				cientific_name,
+				kind,
+				taxonomic_order,
+			});
 			const { proceed } = handleServerErrors(result);
 			if (!proceed) {
 				return;
@@ -58,6 +80,26 @@ export default function SpeciesForm() {
 			onClose();
 		},
 		[executeAsync, onClose],
+	);
+
+	const requestCompletition = useCallback(async () => {
+		await onRequest(commonName, (prompt) => {
+			if (!prompt) {
+				return;
+			}
+
+			setScientificName(prompt.scientificName);
+			setTaxonomicClass(prompt.taxonomicClass);
+			setTaxonomicOrder(prompt.taxonomicOrder);
+		});
+	}, [commonName, onRequest]);
+
+	const onChange = useCallback(
+		(cb: (value: string) => void) =>
+			(e: React.ChangeEvent<HTMLInputElement>) => {
+				cb(e.target.value);
+			},
+		[],
 	);
 
 	return (
@@ -71,16 +113,43 @@ export default function SpeciesForm() {
 				</DialogHeader>
 
 				<form onSubmit={onSubmit} className="space-y-4">
-					<div>
-						<Label htmlFor="common_name">Nome popular</Label>
-						<Input
-							aria-required
-							required
-							id="common_name"
-							name="common_name"
-							type="text"
-							placeholder="Leão"
-						/>
+					<div className="grid grid-cols-[1fr,auto] gap-2 items-end">
+						<div>
+							<Label htmlFor="common_name">Nome popular</Label>
+							<Input
+								aria-required
+								required
+								id="common_name"
+								name="common_name"
+								type="text"
+								placeholder="Leão"
+								value={commonName}
+								onChange={onChange(setCommonName)}
+							/>
+						</div>
+
+						<Tooltip
+							defaultOpen={!isLoadingCompletition && commonName.length < 3}
+						>
+							<TooltipTrigger asChild>
+								<Button
+									type="button"
+									onClick={requestCompletition}
+									disabled={isLoadingCompletition || commonName.length < 3}
+								>
+									{isLoadingCompletition ? (
+										<LoaderCircle className="animate-spin" />
+									) : (
+										<Sparkles />
+									)}
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<span className="flex gap-2 items-center">
+									<Bot /> Preencher automático com IA
+								</span>
+							</TooltipContent>
+						</Tooltip>
 					</div>
 
 					<div>
@@ -92,6 +161,39 @@ export default function SpeciesForm() {
 							name="cientific"
 							type="text"
 							placeholder="Panthera leo"
+							value={scientificName}
+							onChange={onChange(setScientificName)}
+							disabled={isLoadingCompletition}
+						/>
+					</div>
+
+					<div>
+						<Label htmlFor="kind">Classe</Label>
+						<Input
+							aria-required
+							required
+							id="kind"
+							name="kind"
+							type="text"
+							placeholder="Mammalia"
+							value={taxonomicClass}
+							onChange={onChange(setTaxonomicClass)}
+							disabled={isLoadingCompletition}
+						/>
+					</div>
+
+					<div>
+						<Label htmlFor="order">Ordem</Label>
+						<Input
+							aria-required
+							required
+							id="order"
+							name="order"
+							type="text"
+							placeholder="Carnivora"
+							value={taxonomicOrder}
+							onChange={onChange(setTaxonomicOrder)}
+							disabled={isLoadingCompletition}
 						/>
 					</div>
 
