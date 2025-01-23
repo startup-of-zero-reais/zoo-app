@@ -1,64 +1,27 @@
 'use server';
 
-import { z } from 'zod';
 import { format } from 'date-fns';
 import { authFetch } from '@/lib/functions/auth-fetcher';
 import { API_DOMAIN } from '@/lib/constants/main';
+import { CreateAnimalSchema } from '@/lib/types/schemas/create-animal';
 import { authActionClient } from './safe-action';
 
-const MICROCHIP = 'microchip';
-const WASHER = 'anilha';
-const MARK_TYPE = {
-	[MICROCHIP]: MICROCHIP,
-	[WASHER]: 'washer',
-};
+const DATE_RFC3339_FORMAT = "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
 export const addAnimalAction = authActionClient
-	.schema(
-		z.object({
-			name: z.string().optional(),
-			mark_type: z.enum(['microchip', 'anilha'], {
-				message: 'Selecione o tipo de marcação para continuar.',
-				required_error: 'Selecione o tipo de marcação para continuar.',
-			}),
-			mark_num: z
-				.string()
-				.min(1, 'O campo "marcação" é necessário para continuar.'),
-			entry_date: z.date({
-				required_error: 'Informe a "Data de chegada" do animal.',
-				message: 'A "Data de chegada" deve ser uma data correta.',
-				coerce: true,
-			}),
-			origin: z.string().optional(),
-			animal_born: z.date({
-				required_error:
-					'Informe a "Idade do animal" ou a "Data de nascimento" para prosseguir.',
-				message: 'A "Idade do animal" deve ser uma data válida.',
-				coerce: true,
-			}),
-			species: z
-				.string()
-				.uuid('A "Espécie" deve ser selecionada para prosseguir.'),
-			enclosure: z.string().uuid('O "Recinto" do animal deve ser informado.'),
-			weight: z
-				.number({
-					required_error: 'O "Peso atual" do animal deve ser informado.',
-					message: 'O "Peso atual" deve ser um número válido.',
-					invalid_type_error: 'O "Peso atual" deve ser um número.',
-					coerce: true,
-				})
-				.nonnegative('O "Peso atual" não pode ser negativo'),
-		}),
-	)
+	.schema(CreateAnimalSchema)
 	.action(async ({ parsedInput }) => {
 		const {
 			name,
-			mark_type,
-			mark_num,
+			washer_code,
+			microchip_code,
 			entry_date,
 			origin,
-			animal_born,
+			born_date,
+			age,
+			gender,
 			species,
+			observation,
 			enclosure,
 			weight,
 		} = parsedInput;
@@ -69,15 +32,32 @@ export const addAnimalAction = authActionClient
 			body.append('name', name);
 		}
 
-		body.append('mark_type', MARK_TYPE[mark_type]);
-		body.append('mark_number', mark_num);
-		body.append('landing_at', format(entry_date, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
+		if (washer_code) {
+			body.append('washer_code', washer_code);
+		}
+
+		if (microchip_code) {
+			body.append('microchip_code', microchip_code);
+		}
 
 		if (origin) {
 			body.append('origin', origin);
 		}
 
-		body.append('age', format(animal_born, "yyyy-MM-dd'T'hh:mm:ss'Z'"));
+		if (age) {
+			body.append('age', age);
+		}
+
+		if (born_date) {
+			body.append('born_date', format(born_date, DATE_RFC3339_FORMAT));
+		}
+
+		if (observation) {
+			body.append('observation', observation);
+		}
+
+		body.append('gender', gender);
+		body.append('landing_at', format(entry_date, DATE_RFC3339_FORMAT));
 		body.append('species_id', species);
 		body.append('enclosure_id', enclosure);
 		body.append('weight', `${weight}`);
