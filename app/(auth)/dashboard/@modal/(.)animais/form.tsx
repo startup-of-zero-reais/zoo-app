@@ -8,7 +8,7 @@ import { parseISO } from 'date-fns';
 import { handleServerErrors } from '@/lib/functions/errors';
 import { addAnimalAction } from '@/lib/actions/add-animal-action';
 import { Species } from '@/lib/types/schemas/species.schema';
-import { Enclosure } from '@/lib/types/entities/enclosure';
+import { Enclosure } from '@/lib/types/schemas/enclosure.schema';
 import { extractFormData } from '@/lib/functions/extract-form-data';
 import { AgeTypes, GenderTypes } from '@/lib/types/entities/animal';
 import { Button } from '@/components/ui/button';

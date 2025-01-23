@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { timestamps } from './base';
 import { SpeciesSchema } from './species.schema';
 import { EnclosureSchema } from './enclosure.schema';
+import { UserSchema } from './user.schema';
 
 export const animalGendersSchema = z.enum(['male', 'female', 'undefined'], {
 	required_error: 'Informe o "Gênero" do animal',
@@ -37,6 +38,19 @@ export const AnimalSchema = z
 	})
 	.merge(timestamps);
 
+export const WeightSchema = z
+	.object({
+		id: z.string().uuid(),
+		weight: z.number(),
+		animal_id: z.string().uuid(),
+		user_id: z.string().uuid(),
+
+		animal: AnimalSchema.optional(),
+		user: UserSchema.optional(),
+	})
+	.merge(timestamps);
+
 export type Animal = z.infer<typeof AnimalSchema>;
 export type AnimalGender = z.infer<typeof animalGendersSchema>;
 export type AnimalAges = z.infer<typeof animalAgeSchema>;
+export type Weight = z.infer<typeof WeightSchema>;

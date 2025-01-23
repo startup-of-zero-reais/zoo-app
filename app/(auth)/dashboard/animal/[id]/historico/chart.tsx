@@ -1,7 +1,12 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
+import Link from 'next/link';
+import { PlusSquare, TrendingDown, TrendingUp } from 'lucide-react';
 import { CartesianGrid, LabelList, Line, LineChart, XAxis } from 'recharts';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale/pt-BR';
+import { FetchAnimalWeightsResponse } from '@/lib/types/schemas/responses/fetch-animals';
+import { Animal } from '@/lib/types/schemas/animal.schema';
 import {
 	Card,
 	CardContent,
@@ -11,45 +16,82 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import {
-	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
-const chartData = [
-	{ month: 'January', desktop: 186, mobile: 80 },
-	{ month: 'February', desktop: 305, mobile: 200 },
-	{ month: 'March', desktop: 237, mobile: 120 },
-	{ month: 'April', desktop: 73, mobile: 190 },
-	{ month: 'May', desktop: 209, mobile: 130 },
-	{ month: 'June', desktop: 214, mobile: 140 },
-];
+interface WeightsChartProps {
+	id: string;
+	history: FetchAnimalWeightsResponse;
+}
 
-const chartConfig = {
-	desktop: {
-		label: 'Desktop',
-		color: 'hsl(var(--chart-1))',
-	},
-	mobile: {
-		label: 'Mobile',
-		color: 'hsl(var(--chart-2))',
-	},
-} satisfies ChartConfig;
+const CHART_FORMAT = 'dd MMM yyyy';
 
-export function WeightsChart() {
+export function WeightsChart({ id, history }: WeightsChartProps) {
+	if (history.weights.length == 0) {
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle>Sem registro</CardTitle>
+					<CardDescription>
+						Registre um novo peso para esse animal
+					</CardDescription>
+				</CardHeader>
+
+				<CardContent>
+					<Button asChild size="lg">
+						<Link href={`/dashboard/animais/${id}/peso`}>
+							<PlusSquare /> Registrar novo peso
+						</Link>
+					</Button>
+				</CardContent>
+			</Card>
+		);
+	}
+
+	const idx = history.weights.length - 1;
+	const lastWeight = history.weights.at(idx)?.weight || 0;
+	const animal = history.weights.at(0)?.animal;
+
+	let progression = 'Nenhum registro';
+	let percentage = 0;
+	if (history.weights.length > 1) {
+		const weightBefore = history.weights.at(idx - 1)?.weight || 0;
+
+		percentage = (1 - weightBefore / lastWeight) * 100;
+
+		progression =
+			percentage >= 0
+				? `aumentou em ${percentage.toFixed(1)}%`
+				: `reduziu em ${percentage.toFixed(1)}%`;
+	}
+
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Histórico de peso do animal</CardTitle>
-				<CardDescription>Simba - Leão</CardDescription>
+				<CardDescription className="flex gap-2 items-center">
+					{animal?.name || animal?.species?.common_name}
+					<Separator orientation="vertical" className="h-4" />
+					{animal?.species?.scientific_name}
+				</CardDescription>
 			</CardHeader>
 
 			<CardContent>
-				<ChartContainer config={chartConfig}>
+				<ChartContainer
+					config={{
+						desktop: {
+							label: 'Peso',
+							color: 'hsl(var(--chart-1))',
+						},
+					}}
+				>
 					<LineChart
 						accessibilityLayer
-						data={chartData}
+						data={history.weights}
 						margin={{
 							top: 20,
 							left: 12,
@@ -58,18 +100,18 @@ export function WeightsChart() {
 					>
 						<CartesianGrid vertical={false} />
 						<XAxis
-							dataKey="month"
-							tickLine={false}
-							axisLine={false}
+							dataKey="created_at"
 							tickMargin={8}
-							tickFormatter={(value) => value.slice(0, 3)}
+							tickFormatter={(value: Date) =>
+								format(value, CHART_FORMAT, { locale: ptBR })
+							}
 						/>
 						<ChartTooltip
 							cursor={false}
-							content={<ChartTooltipContent indicator="line" />}
+							content={<ChartTooltipContent indicator="line" label="Peso" />}
 						/>
 						<Line
-							dataKey="desktop"
+							dataKey="weight"
 							type="linear"
 							stroke="var(--color-desktop)"
 							strokeWidth={2}
@@ -79,6 +121,7 @@ export function WeightsChart() {
 							activeDot={{
 								r: 6,
 							}}
+							name="Peso (kg)"
 						>
 							<LabelList
 								position="top"
@@ -93,14 +136,36 @@ export function WeightsChart() {
 
 			<CardFooter className="flex-col items-start gap-2 text-sm">
 				<div className="flex gap-2 font-medium leading-none">
-					O peso do animal aumentou em 5.2% desde a última pesagem{' '}
-					<TrendingUp className="h-4 w-4" />
+					O peso do animal {progression} desde a última pesagem{' '}
+					{percentage >= 0 ? (
+						<TrendingUp className="h-4 w-4" />
+					) : (
+						<TrendingDown className="h-4 w-4" />
+					)}
 				</div>
-				<div className="leading-none text-muted-foreground">
-					Mostrando a evolução de peso de Simba.{' '}
-					<strong>Peso atual: 300kg</strong>
-				</div>
+				<ShowingOf animal={animal!} lastWeight={lastWeight} />
 			</CardFooter>
 		</Card>
+	);
+}
+
+function ShowingOf({
+	animal,
+	lastWeight,
+}: {
+	animal: Animal;
+	lastWeight: number;
+}) {
+	const label = animal.name
+		? `de ${animal.name}`
+		: animal.microchip_code
+			? `do animal marcado com ${animal.microchip_code}`
+			: `do animal com a anilha ${animal.washer_code}`;
+
+	return (
+		<div className="leading-none text-muted-foreground">
+			Mostrando a evolução de peso {label}.
+			<strong className="block my-2">Peso atual: {lastWeight}kg</strong>
+		</div>
 	);
 }

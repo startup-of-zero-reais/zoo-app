@@ -99,7 +99,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 
 						<DropdownMenuItem>
 							<Button className="w-full" variant="link" asChild>
-								<Link href="#">
+								<Link href={`/dashboard/animais/${animal.id}/peso`}>
 									<Weight /> Registrar peso
 								</Link>
 							</Button>
