@@ -1,17 +1,15 @@
 import { API_DOMAIN } from '@/lib/constants/main';
 import { authFetch } from '@/lib/functions/auth-fetcher';
-import { Animal } from '@/lib/types/entities/animal';
+import {
+	FetchAnimalsResponse,
+	FetchAnimalsResponseSchema,
+} from '@/lib/types/schemas/responses/fetch-animals';
 
 const BASE_URL = `${API_DOMAIN}/v1/animals`;
 
 interface FetchAnimalsParams {
 	search?: string;
 	rel?: Array<'enclosure' | 'species'>;
-}
-
-interface FetchAnimalsResponse {
-	total: number;
-	animals: Animal[];
 }
 
 export async function fetchAnimals({ search, rel }: FetchAnimalsParams = {}) {
@@ -30,5 +28,7 @@ export async function fetchAnimals({ search, rel }: FetchAnimalsParams = {}) {
 		query = `?${urlQuery.toString()}`;
 	}
 
-	return authFetch<FetchAnimalsResponse>(`${BASE_URL}${query}`);
+	return authFetch<FetchAnimalsResponse>(`${BASE_URL}${query}`).then(
+		FetchAnimalsResponseSchema.parse,
+	);
 }

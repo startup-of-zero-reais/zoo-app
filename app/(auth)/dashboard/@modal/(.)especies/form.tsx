@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { addSpeciesAction } from '@/lib/actions/add-species.action';
 import { handleServerErrors } from '@/lib/functions/errors';
 import { useSpeciesCompletition } from '@/lib/openai/requests/complete-species';
+import { extractFormData } from '@/lib/functions/extract-form-data';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -56,20 +57,18 @@ export default function SpeciesForm() {
 		async (e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
 
-			// @ts-expect-error unknown is not string
-			const common_name: string = e.target['common_name'].value as unknown;
-			// @ts-expect-error unknown is not string
-			const cientific_name: string = e.target['cientific'].value as unknown;
-			// @ts-expect-error unknown is not string
-			const kind: string = e.target['kind'].value as unknown;
-			// @ts-expect-error unknown is not string
-			const taxonomic_order: string = e.target['order'].value as unknown;
+			const { common_name, scientific, order, kind } = extractFormData(e, [
+				'common_name',
+				'scientific',
+				'kind',
+				'order',
+			]);
 
 			const result = await executeAsync({
 				common_name,
-				cientific_name,
+				scientific_name: scientific,
 				kind,
-				taxonomic_order,
+				taxonomic_order: order,
 			});
 			const { proceed } = handleServerErrors(result);
 			if (!proceed) {
@@ -153,12 +152,12 @@ export default function SpeciesForm() {
 					</div>
 
 					<div>
-						<Label htmlFor="cientific">Nome científico</Label>
+						<Label htmlFor="scientific">Nome científico</Label>
 						<Input
 							aria-required
 							required
-							id="cientific"
-							name="cientific"
+							id="scientific"
+							name="scientific"
 							type="text"
 							placeholder="Panthera leo"
 							value={scientificName}

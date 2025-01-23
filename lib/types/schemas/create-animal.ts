@@ -1,13 +1,5 @@
 import { z } from 'zod';
-
-const animalGendersSchema = z.enum(['male', 'female', 'undefined'], {
-	required_error: 'Informe o "Gênero" do animal',
-	invalid_type_error: '"Gênero" não reconhecido',
-});
-
-const animalAgeSchema = z
-	.enum(['neonate', 'cub', 'young', 'adult', 'senile'])
-	.optional();
+import { animalAgeSchema, animalGendersSchema } from './animal.schema';
 
 export const CreateAnimalSchema = z
 	.object({
@@ -61,5 +53,3 @@ export const CreateAnimalSchema = z
 	);
 
 export type CreateAnimal = z.infer<typeof CreateAnimalSchema>;
-export type AnimalGender = z.infer<typeof animalGendersSchema>;
-export type AnimalAges = z.infer<typeof animalAgeSchema>;

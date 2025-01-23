@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { parseISO } from 'date-fns';
 import { handleServerErrors } from '@/lib/functions/errors';
 import { addAnimalAction } from '@/lib/actions/add-animal-action';
-import { Species } from '@/lib/types/entities/species';
+import { Species } from '@/lib/types/schemas/species.schema';
 import { Enclosure } from '@/lib/types/entities/enclosure';
 import { extractFormData } from '@/lib/functions/extract-form-data';
 import { AgeTypes, GenderTypes } from '@/lib/types/entities/animal';

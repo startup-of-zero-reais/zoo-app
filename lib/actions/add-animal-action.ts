@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { format } from 'date-fns';
 import { authFetch } from '@/lib/functions/auth-fetcher';
 import { API_DOMAIN } from '@/lib/constants/main';
@@ -67,5 +68,6 @@ export const addAnimalAction = authActionClient
 			body,
 		});
 
+		revalidatePath('/dashboard', 'layout');
 		return { success: true };
 	});

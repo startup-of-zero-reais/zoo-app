@@ -17,6 +17,7 @@ export interface BaseAnimal {
 	gender: GenderTypes;
 	species_id: string;
 	enclosures_id: string;
+	weight: number;
 }
 
 export interface Animal extends BaseAnimal, Timestamps {

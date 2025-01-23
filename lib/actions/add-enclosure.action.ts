@@ -1,18 +1,12 @@
 'use server';
 
-import { z } from 'zod';
 import { authFetch } from '@/lib/functions/auth-fetcher';
 import { API_DOMAIN } from '@/lib/constants/main';
+import { CreateEnclosureSchema } from '@/lib/types/schemas/create-enclosute';
 import { authActionClient } from './safe-action';
 
 export const addEnclosureAction = authActionClient
-	.schema(
-		z.object({
-			identifier: z
-				.string()
-				.min(2, 'O campo "Recinto" é necessário para continuar.'),
-		}),
-	)
+	.schema(CreateEnclosureSchema)
 	.action(async ({ parsedInput }) => {
 		const { identifier } = parsedInput;
 

@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import Link from 'next/link';
 import { PlusCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Species } from '@/lib/types/entities/species';
+import { Species } from '@/lib/types/schemas/species.schema';
 import { useSpecies } from '@/lib/swr/use-species';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -46,7 +46,7 @@ export default function SearchSpecies({
 
 	const { species, isLoading, isError } = useSpecies(debouncedSearch);
 
-	const hasOption = !!selected.common_name && !!selected.cientific_name;
+	const hasOption = !!selected.common_name && !!selected.scientific_name;
 
 	const onSelect = useCallback(
 		(specie: Species) => () => {
@@ -74,7 +74,7 @@ export default function SearchSpecies({
 					>
 						{hasOption ? (
 							<>
-								{selected.common_name} | {selected.cientific_name}
+								{selected.common_name} | {selected.scientific_name}
 							</>
 						) : (
 							<>{placeholder}</>
@@ -183,7 +183,7 @@ export default function SearchSpecies({
 										<span className="text-sm">{species.common_name}</span>
 										<Separator orientation="vertical" className="h-4 mx-2" />
 										<span className="text-sm text-muted-foreground">
-											{species.cientific_name}
+											{species.scientific_name}
 										</span>
 										<span className="text-xs text-muted-foreground">
 											{species.kind}

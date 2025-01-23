@@ -3,14 +3,9 @@
 import useSWR from 'swr';
 import { API_DOMAIN } from '@/lib/constants/main';
 import { fetcherWithCookies } from '@/lib/functions/fetcher';
-import { Species } from '@/lib/types/entities/species';
+import { FetchSpeciesResponse } from '@/lib/types/schemas/responses/fetch-species';
 
 const BASE_URL = `${API_DOMAIN}/v1/species`;
-
-interface FetchSpeciesResponse {
-	total: number;
-	species: Species[];
-}
 
 export function useSpecies(search: string) {
 	const path = search ? [`${BASE_URL}?search=${search}`] : [BASE_URL];
