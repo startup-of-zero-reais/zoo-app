@@ -208,7 +208,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 								value={animalAge || undefined}
 							>
 								<ToggleGroupItem value="neonate">Neonato</ToggleGroupItem>
-								<ToggleGroupItem value="cub">Cub</ToggleGroupItem>
+								<ToggleGroupItem value="cub">Filhote</ToggleGroupItem>
 								<ToggleGroupItem value="young">Jovem</ToggleGroupItem>
 								<ToggleGroupItem value="adult">Adulto</ToggleGroupItem>
 								<ToggleGroupItem value="senile">Senil</ToggleGroupItem>
