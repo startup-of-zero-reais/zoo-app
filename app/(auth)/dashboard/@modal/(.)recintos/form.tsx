@@ -6,6 +6,7 @@ import { useAction } from 'next-safe-action/hooks';
 import { toast } from 'sonner';
 import { addEnclosureAction } from '@/lib/actions/add-enclosure.action';
 import { handleServerErrors } from '@/lib/functions/errors';
+import { extractFormData } from '@/lib/functions/extract-form-data';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -43,8 +44,7 @@ export default function EnclosureForm() {
 		async (e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
 
-			// @ts-expect-error unknown is not string
-			const identifier: string = e.target['identifier'].value as unknown;
+			const { identifier } = extractFormData(e, ['identifier']);
 
 			const result = await executeAsync({ identifier });
 			const { proceed } = handleServerErrors(result);
