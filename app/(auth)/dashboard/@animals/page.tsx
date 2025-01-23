@@ -1,6 +1,7 @@
 import { MoreHorizontal } from 'lucide-react';
 import { fetchAnimals } from '@/lib/fetchers/fetch-animals';
-import { Animal } from '@/lib/types/entities/animal';
+import { Animal } from '@/lib/types/schemas/animal.schema';
+import { AGE_LABEL } from '@/lib/types/maps/animal-age';
 import {
 	Card,
 	CardContent,
@@ -42,6 +43,10 @@ interface AnimalCardProps {
 }
 
 function AnimalCard({ animal }: AnimalCardProps) {
+	const bornDate = animal.born_date;
+	const ageFromBorn = new Date().getFullYear() - bornDate.getFullYear();
+	const age = animal.age ? AGE_LABEL[animal.age] : `${ageFromBorn} ano(s)`;
+
 	return (
 		<div className="bg-white shadow-md rounded-lg border border-gray-200 p-4 relative flex flex-col">
 			<div className="flex gap-2">
@@ -55,7 +60,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 					</div>
 
 					<p className="italic text-gray-500 text-sm mt-1">
-						{animal.species?.cientific_name}
+						{animal.species?.scientific_name}
 					</p>
 				</div>
 
@@ -66,7 +71,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 
 			<div className="mt-2 text-sm text-gray-700 flex justify-between">
 				<p>
-					<span className="font-semibold">Idade:</span> {'Adulto'}
+					<span className="font-semibold">Idade:</span> {age}
 				</p>
 				<p>
 					<span className="font-semibold">Peso:</span> {`300 kg`}
@@ -76,11 +81,11 @@ function AnimalCard({ animal }: AnimalCardProps) {
 			<div className="mt-3 text-sm text-gray-700">
 				<p>
 					<span className="font-semibold">Microchip:</span>{' '}
-					{animal.mark_number || 'N/A'}
+					{animal.microchip_code || 'N/A'}
 				</p>
 				<p>
 					<span className="font-semibold">Anilha:</span>{' '}
-					{animal.mark_number || 'N/A'}
+					{animal.washer_code || 'N/A'}
 				</p>
 			</div>
 
