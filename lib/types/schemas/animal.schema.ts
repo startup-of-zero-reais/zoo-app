@@ -6,10 +6,15 @@ import { EnclosureSchema } from './enclosure.schema';
 export const animalGendersSchema = z.enum(['male', 'female', 'undefined'], {
 	required_error: 'Informe o "Gênero" do animal',
 	invalid_type_error: '"Gênero" não reconhecido',
+	message: 'Informe o "Gênero" do animal',
 });
 
 export const animalAgeSchema = z
-	.enum(['neonate', 'cub', 'young', 'adult', 'senile'])
+	.enum(['neonate', 'cub', 'young', 'adult', 'senile'], {
+		required_error: 'Informe a "Idade" do animal',
+		invalid_type_error: '"Idade" do animal não reconhecida',
+		message: 'Informe a "Idade" do animal',
+	})
 	.optional();
 
 export const AnimalSchema = z
