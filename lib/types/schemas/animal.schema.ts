@@ -18,6 +18,15 @@ export const animalAgeSchema = z
 	})
 	.optional();
 
+const baseWeightSchema = z
+	.object({
+		id: z.string().uuid(),
+		weight: z.number(),
+		animal_id: z.string().uuid(),
+		user_id: z.string().uuid(),
+	})
+	.merge(timestamps);
+
 export const AnimalSchema = z
 	.object({
 		id: z.string().uuid(),
@@ -29,10 +38,10 @@ export const AnimalSchema = z
 		age: animalAgeSchema,
 		born_date: z.date({ coerce: true }),
 		gender: animalGendersSchema,
-		weight: z.number().optional(),
 		species_id: z.string(),
 		enclosure_id: z.string(),
 
+		weights: z.array(baseWeightSchema).optional(),
 		species: SpeciesSchema.optional(),
 		enclosure: EnclosureSchema.optional(),
 	})
@@ -40,17 +49,13 @@ export const AnimalSchema = z
 
 export const WeightSchema = z
 	.object({
-		id: z.string().uuid(),
-		weight: z.number(),
-		animal_id: z.string().uuid(),
-		user_id: z.string().uuid(),
-
 		animal: AnimalSchema.optional(),
 		user: UserSchema.optional(),
 	})
+	.merge(baseWeightSchema)
 	.merge(timestamps);
 
-export type Animal = z.infer<typeof AnimalSchema>;
+export type Animal = z.infer<typeof AnimalSchema> & { weights?: Weight[] };
 export type AnimalGender = z.infer<typeof animalGendersSchema>;
 export type AnimalAges = z.infer<typeof animalAgeSchema>;
 export type Weight = z.infer<typeof WeightSchema>;

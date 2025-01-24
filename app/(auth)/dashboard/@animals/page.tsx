@@ -62,6 +62,9 @@ function AnimalCard({ animal }: AnimalCardProps) {
 	const ageFromBorn = new Date().getFullYear() - bornDate.getFullYear();
 	const age = animal.age ? AGE_LABEL[animal.age] : `${ageFromBorn} ano(s)`;
 
+	const weight = animal.weights?.at(0)?.weight;
+	const showWeight = weight ? `${weight}kg` : 'N/A';
+
 	return (
 		<div className="bg-white shadow-md rounded-lg border border-gray-200 p-4 relative flex flex-col">
 			<div className="flex gap-2">
@@ -129,7 +132,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 					<span className="font-semibold">Idade:</span> {age}
 				</p>
 				<p>
-					<span className="font-semibold">Peso:</span> {`300 kg`}
+					<span className="font-semibold">Peso:</span> {showWeight}
 				</p>
 			</div>
 
