@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { fetchAnimalWeights } from '@/lib/fetchers/fetch-animals';
 import { WeightsChart } from './chart';
@@ -24,8 +24,8 @@ export default async function WeightHistory({ params }: WeightHistoryProps) {
 			{history.weights.length > 0 && (
 				<div className="border p-4 flex flex-col gap-2">
 					<div className="grid grid-cols-2 p-2">
-						<span className="font-semibold">Peso</span>
-						<span className="font-semibold">Registrado em</span>
+						<span className="font-semibold text-center">Peso</span>
+						<span className="font-semibold text-center">Registrado em</span>
 					</div>
 
 					{[...history.weights].reverse().map((weight) => (
@@ -35,10 +35,7 @@ export default async function WeightHistory({ params }: WeightHistoryProps) {
 						>
 							<span className="font-medium text-center">{weight.weight}kg</span>
 							<span className="text-sm text-muted-foreground text-center">
-								{formatDistanceToNow(weight.created_at, {
-									locale: ptBR,
-									addSuffix: true,
-								})}
+								{formatDistanceAfterADay(weight.created_at)}
 							</span>
 						</div>
 					))}
@@ -46,4 +43,17 @@ export default async function WeightHistory({ params }: WeightHistoryProps) {
 			)}{' '}
 		</div>
 	);
+}
+
+function formatDistanceAfterADay(date: Date) {
+	const DAY = 60 * 60 * 24 * 1000;
+	const moreThanADay = date.getTime() > Date.now() - DAY;
+	if (moreThanADay) {
+		return formatDistanceToNow(date, {
+			locale: ptBR,
+			addSuffix: true,
+		});
+	}
+
+	return format(date, 'dd MMM yyyy');
 }

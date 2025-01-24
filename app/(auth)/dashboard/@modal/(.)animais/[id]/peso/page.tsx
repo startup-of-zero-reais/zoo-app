@@ -1,5 +1,12 @@
 import WeightForm from './form';
 
-export default function WeightPage() {
-	return <WeightForm />;
+interface WeightPageProps {
+	params: Promise<{
+		id: string;
+	}>;
+}
+
+export default async function WeightPage({ params }: WeightPageProps) {
+	const { id } = await params;
+	return <WeightForm animal_id={id} />;
 }

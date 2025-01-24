@@ -52,14 +52,13 @@ export function WeightsChart({ id, history }: WeightsChartProps) {
 		);
 	}
 
-	const idx = history.weights.length - 1;
-	const lastWeight = history.weights.at(idx)?.weight || 0;
+	const lastWeight = history.weights.at(0)?.weight || 0;
 	const animal = history.weights.at(0)?.animal;
 
 	let progression = 'Nenhum registro';
 	let percentage = 0;
 	if (history.weights.length > 1) {
-		const weightBefore = history.weights.at(idx - 1)?.weight || 0;
+		const weightBefore = history.weights.at(1)?.weight || 0;
 
 		percentage = (1 - weightBefore / lastWeight) * 100;
 
@@ -100,6 +99,7 @@ export function WeightsChart({ id, history }: WeightsChartProps) {
 					>
 						<CartesianGrid vertical={false} />
 						<XAxis
+							reversed
 							dataKey="created_at"
 							tickMargin={8}
 							tickFormatter={(value: Date) =>
