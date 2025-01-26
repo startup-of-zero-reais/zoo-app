@@ -16,7 +16,7 @@ const ImportSchema = z.object({
 });
 
 export const FetchImportsResponseSchema = z.object({
-	total: z.number().positive(),
+	total: z.number().nonnegative(),
 	imports: z.array(ImportSchema),
 });
 
