@@ -1,4 +1,4 @@
-import { PlusCircleIcon } from 'lucide-react';
+import { PlusCircleIcon, UploadCloud } from 'lucide-react';
 import { auth } from '@/lib/functions/auth';
 import {
 	Sidebar,
@@ -20,6 +20,11 @@ const animalsItems: MenuItem[] = [
 		title: 'Cadastrar espécie',
 		url: '/dashboard/especies',
 		icon: PlusCircleIcon,
+	},
+	{
+		title: 'Importar planilha',
+		url: '/dashboard/import',
+		icon: UploadCloud,
 	},
 ];
 

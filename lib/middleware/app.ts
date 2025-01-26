@@ -45,7 +45,7 @@ export default async function AppMiddleware(request: NextRequest) {
 			path === '/' ? '' : `?redir_to=${encodeURIComponent(fullPath)}`;
 
 		return NextResponse.redirect(
-			new URL(`${PAGE.LOGIN}${whereToGo}`, request.url),
+			new URL(`/app${PAGE.LOGIN}${whereToGo}`, request.url),
 		);
 
 		// se o usuario esta logado
