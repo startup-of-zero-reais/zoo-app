@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const CHARSET =
 	'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-const CHUNK_SIZE = 1 * 128; // 1MB
+const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 // const ENDPOINT = 'http://localhost:3000/app/api/upload';
 const ENDPOINT = 'http://localhost:8080/api/v1/upload';
 

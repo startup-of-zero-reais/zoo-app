@@ -44,6 +44,14 @@ const importEnclosureSchema = z
 const importAnimalSchema = z
 	.object({
 		name: z.string().optional(),
+		washer_code: z.string().optional(),
+		microchip_code: z.string().optional(),
+		landing_at: z.date({ coerce: true }).optional(),
+		origin: z.string().optional(),
+		born_date: z.date({ coerce: true }).optional(),
+		age: z.enum(['Neonato', 'Filhote', 'Jovem', 'Adulto', 'Senil']).optional(),
+		gender: z.enum(['Masculino', 'Feminino', 'Indefinido']).optional(),
+		observation: z.string().optional(),
 	})
 	.merge(baseImportSchema);
 

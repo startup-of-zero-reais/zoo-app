@@ -5,6 +5,12 @@ export async function POST(request: NextRequest) {
 
 	const discordWebhook = process.env.DISCORD_WEBHOOK!;
 
+	if (!discordWebhook) {
+		return new Response(
+			JSON.stringify({ success: true, message: 'missing webhook' }),
+		);
+	}
+
 	const message = {
 		content:
 			`:rotating_light: **Erro capturado no App** :rotating_light:\n\n**Erro:** ${error}\n\n**Stack:**\n\`\`\`${stack.substring(0, 1000)}\`\`\``.substring(
@@ -20,7 +26,7 @@ export async function POST(request: NextRequest) {
 	});
 
 	if (!result.ok) {
-		console.error(await result.text());
+		console.error('Discord webhook failed', await result.text());
 		return new Response(JSON.stringify({ message: 'Not sent' }), {
 			status: result.status,
 		});

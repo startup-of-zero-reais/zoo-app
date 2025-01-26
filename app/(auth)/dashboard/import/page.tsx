@@ -1,12 +1,12 @@
 import Link from 'next/link';
+import { Trash } from 'lucide-react';
 import { fetchImports } from '@/lib/fetchers/fetch-imports';
 import Upload from '@/components/helpers/upload';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
 export default async function Page() {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { imports } = (await fetchImports()) as Promise<any>;
+	const { imports } = await fetchImports();
 	const PROGRESS = {
 		sending: 25,
 		received: 25,
@@ -49,11 +49,17 @@ export default async function Page() {
 						<Progress value={PROGRESS[importState.state]} />
 
 						{importState.state === 'completed' && (
-							<Button variant="link" asChild>
-								<Link href={`/dashboard/import/${importState.id}`}>
-									Importar
-								</Link>
-							</Button>
+							<div className="flex items-center gap-4">
+								<Button variant="outline" asChild>
+									<Link href={`/dashboard/import/${importState.id}`}>
+										Abrir arquivo
+									</Link>
+								</Button>
+
+								<Button variant="destructive">
+									<Trash /> Deletar
+								</Button>
+							</div>
 						)}
 
 						{importState.state === 'error' && (

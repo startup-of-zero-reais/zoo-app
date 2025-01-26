@@ -56,11 +56,24 @@ export default function UploadBoundary({
 							key={upload.id}
 							className="grid grid-cols-[1fr,1fr,auto] items-center gap-4 transition-all animate-slide-up-fade"
 						>
-							<span className="max-w-72 overflow-x-hidden text-ellipsis text-nowrap text-sm">
-								{upload.file.name}
-							</span>
+							<TooltipProvider delayDuration={100}>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<span className="max-w-72 overflow-x-hidden text-ellipsis text-nowrap text-sm">
+											{upload.file.name}
+										</span>
+									</TooltipTrigger>
+									<TooltipContent>{upload.file.name}</TooltipContent>
+								</Tooltip>
+							</TooltipProvider>
 
 							<div>
+								{upload.status === 'prepared' && (
+									<span className="text-sm text-muted-foreground">
+										Aguardando envio
+									</span>
+								)}
+
 								{upload.status === 'uploading' && (
 									<Progress value={upload.progress} />
 								)}
