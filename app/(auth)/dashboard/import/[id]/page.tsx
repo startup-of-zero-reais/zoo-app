@@ -1,4 +1,6 @@
 import { fetchImportRecords } from '@/lib/fetchers/fetch-imports';
+import { fetchSpecies } from '@/lib/fetchers/fetch-species';
+import { fetchEnclosures } from '@/lib/fetchers/fetch-enclosures';
 import AnimalsList from './animals';
 
 interface ImportRecordsPageProps {
@@ -12,7 +14,12 @@ export default async function ImportRecordsPage({
 }: ImportRecordsPageProps) {
 	const { id } = await params;
 
-	const { animals, species, enclosures } = await fetchImportRecords(id);
+	const [validSpecies, validEnclosures, { animals, species, enclosures }] =
+		await Promise.all([
+			fetchSpecies(),
+			fetchEnclosures(),
+			fetchImportRecords(id),
+		]);
 
 	return (
 		<div className="grid gap-4">
@@ -64,7 +71,11 @@ export default async function ImportRecordsPage({
 				</div>
 			)}
 
-			<AnimalsList animals={animals} />
+			<AnimalsList
+				animals={animals}
+				species={validSpecies}
+				enclosures={validEnclosures}
+			/>
 		</div>
 	);
 }

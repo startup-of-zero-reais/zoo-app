@@ -52,6 +52,8 @@ const importAnimalSchema = z
 		age: z.enum(['Neonato', 'Filhote', 'Jovem', 'Adulto', 'Senil']).optional(),
 		gender: z.enum(['Masculino', 'Feminino', 'Indefinido']).optional(),
 		observation: z.string().optional(),
+		species_id: z.string().optional(),
+		enclosure_id: z.string().optional(),
 	})
 	.merge(baseImportSchema);
 
