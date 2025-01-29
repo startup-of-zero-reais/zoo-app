@@ -17,8 +17,23 @@ export default async function Page() {
 
 	return (
 		<div className="grid gap-4">
-			<h1>Upload</h1>
-			<Upload />
+			<h1 className="text-xl font-semibold">Importar planilha</h1>
+
+			<p className="text-muted-foreground">
+				Para importar a planilha, clique abaixo, escolha a planilha e adicione
+				na fila de importação
+			</p>
+
+			<div className="grid lg:grid-cols-4 gap-4 items-center">
+				<Upload />
+
+				<p>
+					<strong>Dica:</strong> Inicie a importação pela planilha de{' '}
+					<span className="text-primary">recintos</span> e de{' '}
+					<span className="text-primary">espécies</span>. Por último, a de{' '}
+					<span className="text-primary">animais</span>.
+				</p>
+			</div>
 
 			<div className="flex flex-col gap-2">
 				{imports.map((importState) => (

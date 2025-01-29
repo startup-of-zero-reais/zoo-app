@@ -1,4 +1,4 @@
-import { PlusCircleIcon, UploadCloud } from 'lucide-react';
+import { Home, PlusCircleIcon, UploadCloud } from 'lucide-react';
 import { auth } from '@/lib/functions/auth';
 import {
 	Sidebar,
@@ -9,6 +9,14 @@ import {
 import { MenuItem, SidebarLinkGroup } from './link-group';
 import SidebarNotifications from './notifications';
 import SidebarFooterContent from './footer';
+
+const homeItems: MenuItem[] = [
+	{
+		title: 'Início',
+		url: '/dashboard',
+		icon: Home,
+	},
+];
 
 const animalsItems: MenuItem[] = [
 	{
@@ -43,6 +51,7 @@ export default async function AppSidebar() {
 		<Sidebar>
 			<SidebarHeader />
 			<SidebarContent>
+				<SidebarLinkGroup label="Início" items={homeItems} />
 				<SidebarLinkGroup label="Animais" items={animalsItems} />
 				<SidebarLinkGroup label="Recintos" items={enclosuresItems} />
 				<SidebarNotifications />

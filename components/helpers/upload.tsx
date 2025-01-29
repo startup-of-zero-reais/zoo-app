@@ -26,7 +26,7 @@ export default function Upload() {
 	}, [selectedFile, enqueueUpload]);
 
 	return (
-		<div className="space-y-2 border p-4 flex flex-col max-w-72">
+		<div className="space-y-2 border p-4 flex flex-col max-w-72 w-full">
 			<Label
 				htmlFor="file"
 				className="hover:cursor-pointer border border-dashed flex items-center"
