@@ -8,9 +8,9 @@ import { parseISO } from 'date-fns';
 import { handleServerErrors } from '@/lib/functions/errors';
 import { addAnimalAction } from '@/lib/actions/add-animal-action';
 import { Species } from '@/lib/types/schemas/species.schema';
-import { Enclosure } from '@/lib/types/entities/enclosure';
+import { Enclosure } from '@/lib/types/schemas/enclosure.schema';
 import { extractFormData } from '@/lib/functions/extract-form-data';
-import { AgeTypes, GenderTypes } from '@/lib/types/entities/animal';
+import { AnimalAges, AnimalGender } from '@/lib/types/schemas/animal.schema';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
@@ -40,9 +40,9 @@ interface AnimalsFormProps {
 export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 	const [open, onOpenChange, onClose] = useOpenChange();
 
-	const [animalAge, setAnimalAge] = useState<AgeTypes | null>(null);
+	const [animalAge, setAnimalAge] = useState<AnimalAges | null>(null);
 	const [animalBorn, setAnimalBorn] = useState<Date | null>(null);
-	const [animalGender, setAnimalGender] = useState<GenderTypes>('undefined');
+	const [animalGender, setAnimalGender] = useState<AnimalGender>('undefined');
 	const [specie, setSpecie] = useState({} as Species);
 	const [selectedEnclosure, setSelectedEnclosure] = useState('');
 
@@ -203,7 +203,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 							<ToggleGroup
 								type="single"
 								variant="outline"
-								// @ts-expect-error setAnimalAge expects an enum not a primitive string
+								// @ts-expect-error setAnimalAge expects a enum not a primitive string
 								onValueChange={setAnimalAge}
 								value={animalAge || undefined}
 							>

@@ -1,4 +1,11 @@
-import { MoreHorizontal } from 'lucide-react';
+import Link from 'next/link';
+import {
+	ChartLine,
+	MoreHorizontal,
+	PenSquare,
+	Trash,
+	Weight,
+} from 'lucide-react';
 import { fetchAnimals } from '@/lib/fetchers/fetch-animals';
 import { Animal } from '@/lib/types/schemas/animal.schema';
 import { AGE_LABEL } from '@/lib/types/maps/animal-age';
@@ -11,6 +18,14 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default async function AnimalsPage() {
 	const animals = await fetchAnimals({ rel: ['enclosure', 'species'] });
@@ -47,6 +62,9 @@ function AnimalCard({ animal }: AnimalCardProps) {
 	const ageFromBorn = new Date().getFullYear() - bornDate.getFullYear();
 	const age = animal.age ? AGE_LABEL[animal.age] : `${ageFromBorn} ano(s)`;
 
+	const weight = animal.weights?.at(0)?.weight;
+	const showWeight = weight ? `${weight}kg` : 'N/A';
+
 	return (
 		<div className="bg-white shadow-md rounded-lg border border-gray-200 p-4 relative flex flex-col">
 			<div className="flex gap-2">
@@ -64,9 +82,49 @@ function AnimalCard({ animal }: AnimalCardProps) {
 					</p>
 				</div>
 
-				<Button size="icon">
-					<MoreHorizontal />
-				</Button>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button>
+							<MoreHorizontal />
+						</Button>
+					</DropdownMenuTrigger>
+
+					<DropdownMenuContent className="bg-card z-10 max-w-44 shadow-lg drop-shadow-lg">
+						<DropdownMenuLabel>Ações</DropdownMenuLabel>
+						<DropdownMenuSeparator className="w-full bg-accent translate-x-1" />
+						<DropdownMenuItem>
+							<Button className="w-full" variant="link" asChild>
+								<Link href="#">
+									<PenSquare /> Editar
+								</Link>
+							</Button>
+						</DropdownMenuItem>
+
+						<DropdownMenuItem>
+							<Button className="w-full" variant="link" asChild>
+								<Link href={`/dashboard/animais/${animal.id}/peso`}>
+									<Weight /> Registrar peso
+								</Link>
+							</Button>
+						</DropdownMenuItem>
+
+						<DropdownMenuItem>
+							<Button className="w-full" variant="link" asChild>
+								<Link href={`/dashboard/animal/${animal.id}/historico`}>
+									<ChartLine /> Historico de peso
+								</Link>
+							</Button>
+						</DropdownMenuItem>
+
+						<DropdownMenuItem>
+							<Button className="w-full" variant="destructive" asChild>
+								<Link href="#">
+									<Trash /> Deletar
+								</Link>
+							</Button>
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 
 			<div className="mt-2 text-sm text-gray-700 flex justify-between">
@@ -74,7 +132,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 					<span className="font-semibold">Idade:</span> {age}
 				</p>
 				<p>
-					<span className="font-semibold">Peso:</span> {`300 kg`}
+					<span className="font-semibold">Peso:</span> {showWeight}
 				</p>
 			</div>
 

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Toaster } from '@/components/ui/sonner';
+import { ErrorBoundary } from '@/components/layout/error-boundary';
 import './globals.css';
+import UploadBoundary from '@/components/layout/upload/upload-boundary';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -26,10 +28,14 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
 			>
-				<main>{children}</main>
-				<Toaster richColors />
+				<ErrorBoundary>
+					<UploadBoundary>
+						<main>{children}</main>
+						<Toaster richColors />
+					</UploadBoundary>
+				</ErrorBoundary>
 			</body>
 		</html>
 	);
