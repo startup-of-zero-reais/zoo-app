@@ -24,14 +24,15 @@ export default async function Page() {
 				na fila de importação
 			</p>
 
-			<div className="grid lg:grid-cols-4 gap-4 items-center">
+			<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 items-center">
 				<Upload />
 
-				<p>
+				<p className="lg:col-span-2 xl:col-span-1">
 					<strong>Dica:</strong> Inicie a importação pela planilha de{' '}
 					<span className="text-primary">recintos</span> e de{' '}
 					<span className="text-primary">espécies</span>. Por último, a de{' '}
-					<span className="text-primary">animais</span>.
+					<span className="text-primary">animais</span>.{' '}
+					<em>Isso vai facilitar toda a importação</em>.
 				</p>
 			</div>
 

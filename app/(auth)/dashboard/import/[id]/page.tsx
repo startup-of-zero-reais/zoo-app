@@ -1,8 +1,18 @@
+import { Lock, Trash } from 'lucide-react';
 import { fetchImportRecords } from '@/lib/fetchers/fetch-imports';
 import { fetchSpecies } from '@/lib/fetchers/fetch-species';
 import { fetchEnclosures } from '@/lib/fetchers/fetch-enclosures';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import AnimalsList from './animals';
 import EnclosuresList from './enclosures';
+import SpeciesList from './species';
 
 interface ImportRecordsPageProps {
 	params: Promise<{
@@ -22,37 +32,31 @@ export default async function ImportRecordsPage({
 			fetchImportRecords(id),
 		]);
 
+	if (!animals.length && !species.length && !enclosures.length) {
+		return (
+			<Card>
+				<CardHeader>
+					<CardTitle>Tudo pronto!</CardTitle>
+					<CardDescription>Todos os dados já foram importados!</CardDescription>
+				</CardHeader>
+				<CardContent className="space-y-2">
+					<p className="text-sm">
+						<Lock className="inline-block mr-2" size={14} />
+						Você pode apagar o arquivo com segurança{' '}
+					</p>
+
+					<Button variant="destructive">
+						<Trash /> Excluir
+					</Button>
+				</CardContent>
+			</Card>
+		);
+	}
+
 	return (
 		<div className="grid gap-4">
 			<EnclosuresList enclosures={enclosures} />
-
-			{species.length > 0 && (
-				<div className="grid">
-					<h2 className="text-lg font-semibold py-4">Espécies</h2>
-
-					<div className="grid grid-cols-5 items-center border p-2">
-						<span className="text-sm font-semibold">Nome comum</span>
-						<span className="text-sm font-semibold">Nome científico</span>
-						<span className="text-sm font-semibold">Ordem taxonômica</span>
-						<span className="text-sm font-semibold">Classe taxonômica</span>
-						<span className="text-sm font-semibold">Erro</span>
-					</div>
-
-					{species.map((s) => (
-						<div
-							className="grid grid-cols-5 items-center border-x last:border-b even:bg-muted-foreground/10 hover:bg-muted-foreground/20 p-2"
-							key={s.id}
-						>
-							<span className="text-sm">{s.common_name}</span>
-							<span className="text-sm">{s.scientific_name}</span>
-							<span className="text-sm">{s.taxonomic_order}</span>
-							<span className="text-sm">{s.kind}</span>
-							<span className="text-sm">{s.reason || 'N/A'}</span>
-						</div>
-					))}
-				</div>
-			)}
-
+			<SpeciesList species={species} />
 			<AnimalsList
 				animals={animals}
 				species={validSpecies}

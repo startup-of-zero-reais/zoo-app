@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import {
 	CheckSquare2,
+	LoaderCircle,
 	Trash2,
 	Upload as UploadIcon,
 	XSquare,
@@ -50,7 +51,7 @@ export default function UploadBoundary({
 			{children}
 
 			{uploads.length > 0 && (
-				<div className="fixed bottom-4 right-4 shadow-md drop-shadow-lg bg-white p-4 animate-fade-in w-96 flex flex-col gap-2 transition-all">
+				<div className="fixed bottom-4 right-4 shadow-md drop-shadow-lg bg-white p-4 animate-fade-in left-4 md:left-auto lg:w-[600px] flex flex-col gap-2 transition-all z-10">
 					{uploads.map((upload) => (
 						<div
 							key={upload.id}
@@ -107,7 +108,11 @@ export default function UploadBoundary({
 									size={'icon'}
 									disabled={state === 'uploading'}
 								>
-									<UploadIcon />
+									{state === 'uploading' ? (
+										<LoaderCircle className="animate-spin" />
+									) : (
+										<UploadIcon />
+									)}
 								</Button>
 							)}
 
