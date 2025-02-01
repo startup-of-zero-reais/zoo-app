@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useCallback, useState } from 'react';
 import { Eye, LoaderCircle, MoreVertical } from 'lucide-react';
 import { useAction } from 'next-safe-action/hooks';
-import { importAnimalAction } from '@/lib/actions/import-animal.action';
+import { importRecordAction } from '@/lib/actions/import.action';
 import { cn } from '@/lib/utils';
 import { FetchImportRecordsResponse } from '@/lib/types/schemas/responses/fetch-imports';
 import { formatToBR } from '@/lib/functions/dates';
@@ -55,7 +55,7 @@ export default function AnimalsList({
 		enclosures.enclosures.map((e) => [e.id, e.identification]),
 	);
 
-	const { executeAsync, isExecuting } = useAction(importAnimalAction, {
+	const { executeAsync, isExecuting } = useAction(importRecordAction, {
 		onSuccess() {
 			console.log('Success');
 			setSelected([]);

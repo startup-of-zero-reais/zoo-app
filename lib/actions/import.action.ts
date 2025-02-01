@@ -6,10 +6,10 @@ import { authFetch } from '@/lib/functions/auth-fetcher';
 import { API_DOMAIN } from '@/lib/constants/main';
 import { authActionClient } from './safe-action';
 
-export const importAnimalAction = authActionClient
+export const importRecordAction = authActionClient
 	.schema(
 		z.object({
-			type: z.literal('animal'),
+			type: z.enum(['animal', 'enclosure', 'species']),
 			ids: z.array(z.string().uuid()),
 		}),
 	)
