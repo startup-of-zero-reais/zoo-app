@@ -35,6 +35,18 @@ export async function fetchAnimals({ search, rel }: FetchAnimalsParams = {}) {
 	);
 }
 
+interface FetchAnimalParams {
+	animal_id: string;
+	rel?: Array<'enclosure' | 'species'>;
+}
+
+export async function fetchAnimal(
+	{ animal_id }: FetchAnimalParams = { animal_id: '' },
+) {
+	const response = await fetchAnimals();
+	return response.animals.find((a) => a.id === animal_id);
+}
+
 interface FetchAnimalWeightsParams {
 	id: string;
 	rel?: Array<'animal.enclosure' | 'animal.species' | 'user'>;

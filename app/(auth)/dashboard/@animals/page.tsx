@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import {
 	ChartLine,
+	CloudUpload,
 	MoreHorizontal,
 	PenSquare,
+	PlusCircle,
 	Trash,
 	Weight,
 } from 'lucide-react';
@@ -30,6 +32,40 @@ import {
 export default async function AnimalsPage() {
 	const animals = await fetchAnimals({ rel: ['enclosure', 'species'] });
 	const totalChars = animals.total >= 1 ? `(${animals.total}) ` : '';
+
+	if (!animals?.animals?.length) {
+		return (
+			<div>
+				<Card>
+					<CardHeader>
+						<CardTitle>Nenhum animal cadastrado</CardTitle>
+						<CardDescription>
+							Adicione um animal ou importe uma planilha
+						</CardDescription>
+					</CardHeader>
+
+					<CardContent>
+						<div className="flex gap-2">
+							<Button asChild>
+								<Link href="/dashboard/animais">
+									<PlusCircle />
+									Adicionar
+								</Link>
+							</Button>
+
+							<Button asChild variant="secondary">
+								<Link href="/dashboard/import">
+									<CloudUpload />
+									Importar planilha
+								</Link>
+							</Button>
+						</div>
+					</CardContent>
+					<CardFooter></CardFooter>
+				</Card>
+			</div>
+		);
+	}
 
 	return (
 		<div>
@@ -94,7 +130,7 @@ function AnimalCard({ animal }: AnimalCardProps) {
 						<DropdownMenuSeparator className="w-full bg-accent translate-x-1" />
 						<DropdownMenuItem>
 							<Button className="w-full" variant="link" asChild>
-								<Link href="#">
+								<Link href={`/dashboard/animais?animal_id=${animal.id}`}>
 									<PenSquare /> Editar
 								</Link>
 							</Button>

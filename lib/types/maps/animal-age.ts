@@ -10,4 +10,12 @@ export const AGE_LABEL = {
 	[YOUNG]: 'Jovem',
 	[ADULT]: 'Adulto',
 	[SENILE]: 'Senil',
-};
+} as const;
+
+export const AGE_VALUE = {
+	Neonato: NEONATE,
+	Filhote: CUB,
+	Jovem: YOUNG,
+	Adulto: ADULT,
+	Senil: SENILE,
+} as const;

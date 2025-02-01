@@ -38,6 +38,7 @@ export const AnimalSchema = z
 		age: animalAgeSchema,
 		born_date: z.date({ coerce: true }),
 		gender: animalGendersSchema,
+		observation: z.string().optional(),
 		species_id: z.string(),
 		enclosure_id: z.string(),
 

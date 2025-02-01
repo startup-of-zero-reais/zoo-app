@@ -10,7 +10,13 @@ import { addAnimalAction } from '@/lib/actions/add-animal-action';
 import { Species } from '@/lib/types/schemas/species.schema';
 import { Enclosure } from '@/lib/types/schemas/enclosure.schema';
 import { extractFormData } from '@/lib/functions/extract-form-data';
-import { AnimalAges, AnimalGender } from '@/lib/types/schemas/animal.schema';
+import { toLocalISOString } from '@/lib/functions/dates';
+import {
+	Animal,
+	AnimalAges,
+	AnimalGender,
+} from '@/lib/types/schemas/animal.schema';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
@@ -35,16 +41,38 @@ import SearchSpecies from './species-form';
 
 interface AnimalsFormProps {
 	enclosures: Enclosure[];
+	partialAnimal?: Partial<Animal>;
+	isImport: boolean;
 }
 
-export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
+export default function AnimalsForm({
+	partialAnimal,
+	enclosures = [],
+	isImport,
+}: AnimalsFormProps) {
 	const [open, onOpenChange, onClose] = useOpenChange();
 
-	const [animalAge, setAnimalAge] = useState<AnimalAges | null>(null);
-	const [animalBorn, setAnimalBorn] = useState<Date | null>(null);
-	const [animalGender, setAnimalGender] = useState<AnimalGender>('undefined');
-	const [specie, setSpecie] = useState({} as Species);
-	const [selectedEnclosure, setSelectedEnclosure] = useState('');
+	const [animalAge, setAnimalAge] = useState<AnimalAges | null>(
+		partialAnimal?.age || null,
+	);
+	const [animalBorn, setAnimalBorn] = useState<Date | null>(
+		partialAnimal?.born_date || null,
+	);
+	const [animalGender, setAnimalGender] = useState<AnimalGender>(
+		partialAnimal?.gender || 'undefined',
+	);
+	const [specie, setSpecie] = useState(
+		partialAnimal?.species_id
+			? ({
+					id: partialAnimal?.species_id,
+					common_name: 'Importado',
+					scientific_name: 'Importado',
+				} as Species)
+			: ({} as Species),
+	);
+	const [selectedEnclosure, setSelectedEnclosure] = useState(
+		partialAnimal?.enclosure_id || '',
+	);
 
 	const { executeAsync, hasSucceeded, isExecuting } = useAction(
 		addAnimalAction,
@@ -66,6 +94,12 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 	const onSubmit = useCallback(
 		async (e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault();
+
+			if (isImport) {
+				toast.error('O professor não fez a rota pra corrigir o registro!');
+				return;
+			}
+
 			const { name, washer_code, chip, entry_date, origin, obs, weight } =
 				extractFormData(e, [
 					'name',
@@ -111,6 +145,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 			animalGender,
 			specie.id,
 			selectedEnclosure,
+			isImport,
 		],
 	);
 
@@ -118,7 +153,9 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 		<Dialog defaultOpen={open} onOpenChange={onOpenChange}>
 			<DialogContent className="max-h-svh overflow-y-auto">
 				<DialogHeader>
-					<DialogTitle>Novo animal</DialogTitle>
+					<DialogTitle>
+						{partialAnimal?.id ? 'Correção' : 'Novo animal'}
+					</DialogTitle>
 					<DialogDescription>
 						Adicione um novo animal aqui. Clique para salvar quando estiver
 						pronto
@@ -130,7 +167,13 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<Label htmlFor="name">Nome</Label>
-								<Input id="name" name="name" type="text" placeholder="Simba" />
+								<Input
+									id="name"
+									name="name"
+									type="text"
+									placeholder="Simba"
+									defaultValue={partialAnimal?.name}
+								/>
 							</div>
 
 							<div>
@@ -140,6 +183,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 									name="obs"
 									type="text"
 									placeholder="Macho claro"
+									defaultValue={partialAnimal?.observation}
 								/>
 							</div>
 						</div>
@@ -153,6 +197,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 									type="text"
 									placeholder="ex: 900233000341870"
 									className="flex-1"
+									defaultValue={partialAnimal?.microchip_code}
 								/>
 
 								<Input
@@ -161,6 +206,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 									type="text"
 									placeholder="ex: IBAMA ES 13,5 704"
 									className="flex-1"
+									defaultValue={partialAnimal?.washer_code}
 								/>
 
 								<label htmlFor="chip" className="text-xs text-muted-foreground">
@@ -184,6 +230,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 									id="entry_date"
 									name="entry_date"
 									type="datetime-local"
+									defaultValue={toLocalISOString(partialAnimal?.landing_at)}
 								/>
 							</div>
 
@@ -194,6 +241,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 									name="origin"
 									type="text"
 									placeholder="Centro de triagem"
+									defaultValue={partialAnimal?.origin}
 								/>
 							</div>
 						</div>
@@ -224,6 +272,7 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 								id="born"
 								name="born"
 								type="datetime-local"
+								value={toLocalISOString(animalBorn || undefined)}
 								onChange={(e) => {
 									setAnimalBorn(
 										e.target.value ? parseISO(e.target.value) : null,
@@ -286,11 +335,11 @@ export default function AnimalsForm({ enclosures = [] }: AnimalsFormProps) {
 								</Select>
 							</div>
 
-							<div>
+							<div className={cn(isImport ? 'hidden' : '')}>
 								<Label htmlFor="weight">Peso atual (kg)</Label>
 								<Input
-									aria-required
-									required
+									aria-required={!isImport}
+									required={!isImport}
 									id="weight"
 									name="weight"
 									type="number"
